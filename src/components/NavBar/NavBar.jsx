@@ -1,22 +1,27 @@
 import NavBarLink from "./NavBarLink";
+import styles from "./NavBar.module.scss";
 
 const navData = [
-  { text: "Продукты", icon: "products" },
-  { text: "Пользователи", icon: "clients" },
-  { text: "Категории", icon: "categories" },
-  { text: "Города", icon: "cities" },
-  { text: "Бренды", icon: "brands" },
-  { text: "Протоколы", icon: "protocols" },
-  { text: "Заказы", icon: "orders" },
-  { text: "Баннеры", icon: "banners" },
-  { text: "Семинары", icon: "seminars" },
-  { text: "Промокоды", icon: "promocodes" },
+  { text: "Продукты", name: "products" },
+  { text: "Пользователи", name: "clients" },
+  { text: "Категории", name: "categories" },
+  { text: "Города", name: "cities" },
+  { text: "Бренды", name: "brands" },
+  { text: "Протоколы", name: "protocols" },
+  { text: "Заказы", name: "orders" },
+  { text: "Баннеры", name: "banners" },
+  { text: "Семинары", name: "seminars" },
+  { text: "Промокоды", name: "promocodes" },
 ];
 
 const NavBar = () => {
   return (
-    <div>
-      <NavBarLink />
+    <div className={styles.wrapper}>
+      <nav>
+        {navData.map((item, index) => (
+          <NavBarLink key={index} {...item} />
+        ))}
+      </nav>
     </div>
   );
 };

@@ -9,12 +9,9 @@ const useDynamicSVGImport = (iconName) => {
     setLoading(true);
     const importIcon = async () => {
       try {
-        console.log(123);
         importedIconRef.current = (
-          await import(`../assets/icons/vite.svg?react`)
+          await import(`../assets/icons/${iconName}.svg?react`)
         ).default;
-
-            
       } catch (err) {
         setError(err);
         console.error(err);
