@@ -1,7 +1,12 @@
 import { NavLink } from "react-router-dom";
+import SvgIcon from "../SvgIcon/SvgIcon";
 
 const NavBarLink = () => {
-  return <NavLink>123</NavLink>;
+  return (
+    <NavLink>
+      <SvgIcon iconName={"cities"} svgClass="nav-icon" />
+    </NavLink>
+  );
 };
 
 export default NavBarLink;
