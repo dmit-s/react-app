@@ -1,6 +1,9 @@
+import styles from '../../../../styles/table.module.scss';
+
 const PromotionsTable = () => {
   return (
-    <table>
+    <div className={styles.wrapper}>
+    <table className={styles.table}>
       <thead>
         <tr>
           <th>
@@ -21,7 +24,7 @@ const PromotionsTable = () => {
           <td>Эстетический уход</td>
           <td>Очищение</td>
           <td>-</td>
-          <td>-</td>
+          <td>Нормализующий лосьон, 200мл</td>
           <td>20%</td>
         </tr>
         <tr>
@@ -34,18 +37,10 @@ const PromotionsTable = () => {
           <td>Гоммаж с кремом и витамином У, 50мл</td>
           <td>10%</td>
         </tr>
-        <tr>
-          <td>
-            <input type="checkbox" />
-          </td>
-          <td>Эстетический уход</td>
-          <td>Тонизация</td>
-          <td>Academie</td>
-          <td>Нормализующий лосьон, 200мл</td>
-          <td>10%</td>
-        </tr>
       </tbody>
     </table>
+    </div>
+
   );
 };
 

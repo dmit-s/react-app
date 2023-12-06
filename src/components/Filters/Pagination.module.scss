@@ -1,0 +1,56 @@
+.wrapper {
+    display: flex;
+  
+    .currentPage {
+      min-width: 220px;
+      width: 100%;
+  
+      label {
+        margin-right: 1rem;
+      }
+  
+      input {
+        font-size: 1.4rem;
+        border: 1px solid #d0d3da;
+        border-radius: 4px;
+        width: 42px;
+        height: 32px;
+        text-align: center;
+        margin-right: 0.4rem;
+  
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+          display: none;
+        }
+      }
+  
+      span {
+        color: #bcbfcc;
+      }
+    }
+  
+    .paginationButtons {
+      display: flex;
+      margin-left: 1.6rem;
+  
+      button {
+        display: flex;
+        align-items: center;
+        padding: 0 1.2rem;
+        border: 1px solid #d0d3da;
+        svg {
+          fill: #aaafbd;
+          stroke: #aaafbd;
+          width: 1rem;
+          height: auto;
+        }
+  
+        &:first-child {
+          border-radius: 8px 0 0 8px;
+        }
+        &:last-child {
+          border-radius: 0 8px 8px 0;
+        }
+      }
+    }
+  }
