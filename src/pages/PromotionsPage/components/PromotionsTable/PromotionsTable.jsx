@@ -1,46 +1,46 @@
-import styles from '../../../../styles/table.module.scss';
+import { useEffect } from "react";
+import styles from "../../../../styles/table.module.scss";
+import { useState } from "react";
+import PromotionsService from "../../../../services/PromotionsService";
 
 const PromotionsTable = () => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    PromotionsService.getPromotions().then((data) => setData(data));
+  }, []);
+
   return (
     <div className={styles.wrapper}>
-    <table className={styles.table}>
-      <thead>
-        <tr>
-          <th>
-            <input type="checkbox" />
-          </th>
-          <th>Категория</th>
-          <th>Подкатегория</th>
-          <th>Бренд</th>
-          <th>Товары</th>
-          <th>Кешбек</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <input type="checkbox" />
-          </td>
-          <td>Эстетический уход</td>
-          <td>Очищение</td>
-          <td>-</td>
-          <td>Нормализующий лосьон, 200мл</td>
-          <td>20%</td>
-        </tr>
-        <tr>
-          <td>
-            <input type="checkbox" />
-          </td>
-          <td>Эстетический уход</td>
-          <td>Скрабы</td>
-          <td>Academie</td>
-          <td>Гоммаж с кремом и витамином У, 50мл</td>
-          <td>10%</td>
-        </tr>
-      </tbody>
-    </table>
+      <table className={styles.table}>
+        <thead>
+          <tr>
+            <th>
+              <input type="checkbox" />
+            </th>
+            <th>Категория</th>
+            <th>Подкатегория</th>
+            <th>Бренд</th>
+            <th>Товары</th>
+            <th>Кешбек</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item) => (
+            <tr key={item.id}>
+              <td>
+                <input type="checkbox" />
+              </td>
+              <td>{item.category}</td>
+              <td>{item.subcategory}</td>
+              <td>{item.brand}</td>
+              <td>{item.goods}</td>
+              <td>{item.cashback}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
-
   );
 };
 
