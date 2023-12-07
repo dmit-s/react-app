@@ -1,15 +1,18 @@
 import PromotionsTop from "./components/PromotionsTop/PromotionsTop";
 import PromotionsTable from "./components/PromotionsTable/PromotionsTable";
 import PromotionsRemove from "./components/PromotionsRemove/PromotionsRemove";
-import styles from './PromotionsPage.module.scss';
+import PromotionsWrapper from "./components/PromotionsWrapper/PromotionsWrapper";
+import PromotionsContextProvider from "./context/PromotionsContext";
 
 const PromotionsPage = () => {
   return (
-    <div className={styles.wrapper}>
-      <PromotionsTop />
-      <PromotionsTable />
-      <PromotionsRemove/>
-    </div>
+    <PromotionsContextProvider>
+      <PromotionsWrapper>
+        <PromotionsTop />
+        <PromotionsTable />
+        <PromotionsRemove />
+      </PromotionsWrapper>
+    </PromotionsContextProvider>
   );
 };
 
