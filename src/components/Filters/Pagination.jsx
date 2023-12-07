@@ -1,39 +1,41 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import SvgIcon from "../SvgIcon/SvgIcon";
 import styles from "./Pagination.module.scss";
+import { PromotionsContext } from "../../pages/PromotionsPage/context/PromotionsContext";
 
 const getPagesCount = (data, showItems) => {
   return Math.round(data.length / showItems);
 };
 
 const Pagination = ({ data, showItems }) => {
-  const [pagesCount, setPagesCount] = useState(getPagesCount(data, showItems));
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [pagesCount, setPagesCount] = useState(getPagesCount(data, showItems));
+  // const [currentPage, setCurrentPage] = useState(1);
+  const {state: {currentPage, pagesCount}, dispatch} = useContext(PromotionsContext);
 
-  
+  console.log(currentPage, pagesCount);
 
   useEffect(() => {
-    updatePagesCount();
+    dispatch({type: 'SET_PAGES_COUNT', payload: getPagesCount(data, showItems)});
   }, [showItems, data]);
 
   useEffect(() => {
-    if (currentPage > pagesCount) {
-      setCurrentPage(pagesCount);
+    if ((pagesCount !== null) && (currentPage > pagesCount)) {
+      dispatch({type: 'SET_CURRENT_PAGE', payload: pagesCount})
     }
   }, [pagesCount]);
 
-  const updatePagesCount = () => {
-    setPagesCount(getPagesCount(data, showItems));
-  };
+  // const updatePagesCount = () => {
+  //   dispatch({type: 'SET_PAGES_COUNT', payload: currentPage + 1})
+  // };
 
   const nextPage = () => {
     if (currentPage === pagesCount) return;
-    setCurrentPage(currentPage + 1);
+    dispatch({type: 'SET_CURRENT_PAGE', payload: currentPage + 1})
   };
 
   const prevPage = () => {
     if (currentPage === 1) return;
-    setCurrentPage(currentPage - 1);
+    dispatch({type: 'SET_CURRENT_PAGE', payload: currentPage - 1})
   };
 
   return (
@@ -42,7 +44,7 @@ const Pagination = ({ data, showItems }) => {
         <label>Страница</label>
         <input
           type="number"
-          onChange={(e) => setCurrentPage(e.target.value)}
+          onChange={(e) => dispatch({type: 'SET_CURRENT_PAGE', payload: e.target.value})}
           value={currentPage}
         />
         <span>

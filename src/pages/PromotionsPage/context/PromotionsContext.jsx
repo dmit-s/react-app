@@ -4,6 +4,8 @@ const initialState = {
   promotionsData: [],
   status: "idle",
   error: null,
+  currentPage: 1,
+  pagesCount: null,
 };
 
 const reducer = (state, action) => {
@@ -28,7 +30,17 @@ const reducer = (state, action) => {
         status: 'error',
         error: payload,
       };
-  }
+    case "SET_PAGES_COUNT":
+      return {
+        ...state,
+        pagesCount: payload
+      }
+    case "SET_CURRENT_PAGE":
+      return {
+        ...state,
+        currentPage: payload
+      }
+    }
 };
 
 export const PromotionsContext = createContext();
