@@ -1,23 +1,30 @@
-import { useContext, useEffect } from 'react';
-import styles from './PromotionsWrapper.module.scss';
-import PromotionsService from '../../../../services/PromotionsService';
-import { PromotionsContext } from '../../context/PromotionsContext';
+import { useContext, useEffect, useState } from "react";
+import styles from "./PromotionsWrapper.module.scss";
+import PromotionsService from "../../../../services/PromotionsService";
+import { PromotionsContext } from "../../context/PromotionsContext";
 
+const PromotionsWrapper = ({ children }) => {
+  const {
+    state: { status },
+    dispatch,
+  } = useContext(PromotionsContext);
 
-const PromotionsWrapper = ({children}) => {
-    const {state, dispatch} = useContext(PromotionsContext);
-
-    useEffect(() => {
-        PromotionsService.getPromotions().then((data) => {
-        dispatch({type: 'SET_PROMOTIONS', payload: data})
+  useEffect(() => {
+    PromotionsService.getPromotions()
+      .then((data) => {
+        dispatch({ type: "SET_PROMOTIONS", payload: data });
+      })
+      .catch((err) => {
+        dispatch({ type: "SET_ERROR", payload: err });
+        console.error(err);
       });
-    }, []);
+  }, []);
 
-    return ( 
-        <div className={styles.wrapper}>
-            {children}
-        </div>
-     );
-}
- 
+  return (
+    <div className={styles.wrapper}>
+      {status === "received" && children}
+    </div>
+  );
+};
+
 export default PromotionsWrapper;

@@ -1,13 +1,14 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import styles from "../../../../styles/table.module.scss";
 import { PromotionsContext } from "../../context/PromotionsContext";
 
 const PromotionsTable = () => {
-  const {state, action} = useContext(PromotionsContext);
+  const {
+    state: { promotionsData },
+  } = useContext(PromotionsContext);
 
   return (
-    state && (
-      <div className={styles.wrapper}>
+    <div className={styles.wrapper}>
       <table className={styles.table}>
         <thead>
           <tr>
@@ -22,8 +23,8 @@ const PromotionsTable = () => {
           </tr>
         </thead>
         <tbody>
-          {state.map((item) => (
-            <tr key={item.id}>
+          {promotionsData.map((item) => (
+            <tr key={crypto.randomUUID()}>
               <td>
                 <input type="checkbox" />
               </td>
@@ -37,8 +38,6 @@ const PromotionsTable = () => {
         </tbody>
       </table>
     </div>
-    )
-
   );
 };
 

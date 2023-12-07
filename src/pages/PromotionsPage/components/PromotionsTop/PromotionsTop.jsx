@@ -4,12 +4,14 @@ import styles from "./PromotionsTop.module.scss";
 import { PromotionsContext } from "../../context/PromotionsContext";
 
 const PromotionsTop = () => {
-  const {state, dispatch} = useContext(PromotionsContext);
+  const {
+    state: { promotionsData },
+  } = useContext(PromotionsContext);
 
   return (
     <div className={styles.wrapper}>
-      <Filters/>
-      <button onClick={() => dispatch({type: '123', payload: 'action'})} className={styles.addBtn}>Добавить акцию</button>
+      <Filters data={promotionsData} />
+      <button className={styles.addBtn}>Добавить акцию</button>
     </div>
   );
 };
