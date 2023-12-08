@@ -5,7 +5,7 @@ import { PromotionsContext } from "../../context/PromotionsContext";
 
 const PromotionsWrapper = ({ children }) => {
   const {
-    state: { status },
+    state: { promotionsData, status },
     dispatch,
   } = useContext(PromotionsContext);
 
@@ -21,9 +21,7 @@ const PromotionsWrapper = ({ children }) => {
   }, []);
 
   return (
-    <div className={styles.wrapper}>
-      {status === "received" && children}
-    </div>
+    <div className={styles.wrapper}>{status === "received" && children}</div>
   );
 };
 

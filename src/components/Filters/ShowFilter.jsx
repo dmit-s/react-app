@@ -1,16 +1,21 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import SvgIcon from "../SvgIcon/SvgIcon";
 import styles from "./ShowFIlter.module.scss";
+import { PromotionsContext } from "../../pages/PromotionsPage/context/PromotionsContext";
 
-const ShowFilter = ({ data, showItems, setShowItems }) => {
+const ShowFilter = ({ data }) => {
+  const {
+    state: { showItems },
+    dispatch,
+  } = useContext(PromotionsContext);
+
   const [active, setActive] = useState(false);
 
   const handleClick = () => setActive(!active);
 
   const changeShowItems = (e) => {
     const value = e.target.dataset.value;
-
-    setShowItems(value);
+    dispatch({ type: "SET_SHOW_ITEMS", payload: value });
   };
 
   return (
@@ -28,16 +33,18 @@ const ShowFilter = ({ data, showItems, setShowItems }) => {
           <li onClick={changeShowItems} data-value={10}>
             10
           </li>
-          {data &&
-            data.map((item, index) => {
-              if (index + 1 > 10 && (index + 1) % 10 === 0) {
-                return (
-                  <li key={index} onClick={changeShowItems} data-value={index + 1}>
-                    {index + 1}
-                  </li>
-                );
-              }
-            })}
+          {data.map((item, index) => {
+            if (index + 1 > 10 && (index + 1) % 10 === 0) {
+              return (
+                <li key={index} onClick={changeShowItems} data-value={index + 1}>
+                  {index + 1}
+                </li>
+              );
+            }
+            if (data.length - 1 === index) {
+              return <li key={Math.ceil(data.length / 10) * 10} data-value={Math.ceil(data.length / 10) * 10} onClick={changeShowItems}>{Math.ceil(data.length / 10) * 10}</li>;
+            }
+          })}
         </ul>
       </div>
     </div>

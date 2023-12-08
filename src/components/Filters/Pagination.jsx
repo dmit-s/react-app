@@ -1,41 +1,52 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import SvgIcon from "../SvgIcon/SvgIcon";
 import styles from "./Pagination.module.scss";
 import { PromotionsContext } from "../../pages/PromotionsPage/context/PromotionsContext";
 
 const getPagesCount = (data, showItems) => {
-  return Math.round(data.length / showItems);
+  return Math.ceil(data.length / showItems);
 };
 
-const Pagination = ({ data, showItems }) => {
-  // const [pagesCount, setPagesCount] = useState(getPagesCount(data, showItems));
-  // const [currentPage, setCurrentPage] = useState(1);
-  const {state: {currentPage, pagesCount}, dispatch} = useContext(PromotionsContext);
-
-  console.log(currentPage, pagesCount);
+const Pagination = ({ data }) => {
+  const {
+    state: { currentPage, pagesCount, showItems },
+    dispatch,
+  } = useContext(PromotionsContext);
 
   useEffect(() => {
-    dispatch({type: 'SET_PAGES_COUNT', payload: getPagesCount(data, showItems)});
+    dispatch({
+      type: "SET_PAGES_COUNT",
+      payload: getPagesCount(data, showItems),
+    });
   }, [showItems, data]);
 
   useEffect(() => {
-    if ((pagesCount !== null) && (currentPage > pagesCount)) {
-      dispatch({type: 'SET_CURRENT_PAGE', payload: pagesCount})
+    if(currentPage > getPagesCount(data, showItems)){
+      changeCurrentPage(getPagesCount(data, showItems))
     }
-  }, [pagesCount]);
-
-  // const updatePagesCount = () => {
-  //   dispatch({type: 'SET_PAGES_COUNT', payload: currentPage + 1})
-  // };
+  }, [showItems]);
 
   const nextPage = () => {
     if (currentPage === pagesCount) return;
-    dispatch({type: 'SET_CURRENT_PAGE', payload: currentPage + 1})
+    dispatch({ type: "SET_CURRENT_PAGE", payload: currentPage + 1 });
   };
 
   const prevPage = () => {
     if (currentPage === 1) return;
-    dispatch({type: 'SET_CURRENT_PAGE', payload: currentPage - 1})
+    dispatch({ type: "SET_CURRENT_PAGE", payload: currentPage - 1 });
+  };
+
+  const changeCurrentPage = (value) => {
+    let num;
+    if (!value || value <= 0) {
+      num = 1;
+    } else if (value > pagesCount) {
+      num = pagesCount;
+    } else {
+      num = value;
+    }
+
+    dispatch({ type: "SET_CURRENT_PAGE", payload: num });
   };
 
   return (
@@ -44,7 +55,7 @@ const Pagination = ({ data, showItems }) => {
         <label>Страница</label>
         <input
           type="number"
-          onChange={(e) => dispatch({type: 'SET_CURRENT_PAGE', payload: e.target.value})}
+          onChange={(e) => changeCurrentPage(e.target.value)}
           value={currentPage}
         />
         <span>

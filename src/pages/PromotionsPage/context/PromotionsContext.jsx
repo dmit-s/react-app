@@ -5,7 +5,9 @@ const initialState = {
   status: "idle",
   error: null,
   currentPage: 1,
-  pagesCount: null,
+  pagesCount: 1,
+  showItems: 10,
+  checkedCount: 0,
 };
 
 const reducer = (state, action) => {
@@ -17,30 +19,66 @@ const reducer = (state, action) => {
         ...state,
         promotionsData: payload,
         status: "received",
-        error: null
+        error: null,
       };
     case "SET_LOADING":
       return {
         ...state,
-        status: 'loading',
+        status: "loading",
       };
     case "SET_ERROR":
       return {
         ...state,
-        status: 'error',
+        status: "error",
         error: payload,
       };
     case "SET_PAGES_COUNT":
       return {
         ...state,
-        pagesCount: payload
-      }
+        pagesCount: payload,
+      };
     case "SET_CURRENT_PAGE":
       return {
         ...state,
-        currentPage: payload
-      }
-    }
+        currentPage: payload,
+      };
+    case "SET_SHOW_ITEMS":
+      return {
+        ...state,
+        showItems: payload,
+      };
+    case "UPDATE_CHECKED_COUNT":
+      return {
+        ...state,
+        checkedCount: state.promotionsData.reduce((acc, x) => {
+          if (x.checked) acc++;
+          return acc;
+        }, 0),
+      };
+    case "SET_CHECKED":
+      return {
+        ...state,
+        promotionsData: state.promotionsData.map((item) => {
+          if (item.id === payload.id) {
+            item.checked = payload.value;
+          }
+          return item;
+        }),
+      };
+    case "SET_ALL_CHECKED":
+      const { ids, checked } = payload;
+
+      ids.forEach((id) => {
+        const find = state.promotionsData.find((item) => item.id === id);
+        if (find) {
+          find.checked = checked;
+        }
+      });
+
+      return {
+        ...state,
+      };
+  }
 };
 
 export const PromotionsContext = createContext();

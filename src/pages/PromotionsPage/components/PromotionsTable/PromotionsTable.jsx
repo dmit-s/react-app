@@ -1,36 +1,60 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import styles from "../../../../styles/table.module.scss";
 import { PromotionsContext } from "../../context/PromotionsContext";
+import PromotionsTableItem from "./PromotionsTableItem";
+
+const sliceData = (data, showItems) => {
+  const res = [];
+  for (let i = 0; i < data.length; i++) {
+    if (i === 0 || (i + 1 >= showItems && (i + 1) % 10 === 0)) {
+      res.push([data[i]]);
+    } else {
+      res[res.length - 1].push(data[i]);
+    }
+  }
+  return res;
+};
 
 const PromotionsTable = () => {
   const {
-    state: { promotionsData },
+    state: { promotionsData, showItems, currentPage },
+    dispatch,
   } = useContext(PromotionsContext);
 
   const [slicedData, setSlicedData] = useState([]);
+  const [checkAll, setCheckAll] = useState(false);
 
-  const sliceData = () => {
-    const newArr = [];
-
-    for(let i = 0; i < promotionsData.length; i++){
-
-      if(i === 0){
-        newArr.push([promotionsData[i]]);
-      }
-
-      if(((i + 1) % 10 === 0)){
-        newArr.push([]);
-      }
-
-      newArr[newArr.length - 1].push(promotionsData[i]);
-    }
-
-    setSlicedData(newArr);
-  }
-  console.log(slicedData);
   useEffect(() => {
-    sliceData()
-  }, [])
+    setSlicedData((prevState) => sliceData(promotionsData, showItems));
+  }, [promotionsData, showItems]);
+
+  const handleCheckAll = (isChecked) => {
+    setCheckAll(isChecked);
+
+    dispatch({
+      type: "SET_ALL_CHECKED",
+      payload: {
+        ids: slicedData[currentPage - 1].map((item) => item.id),
+        checked: isChecked,
+      },
+    });
+
+    dispatch({
+      type: "UPDATE_CHECKED_COUNT",
+    });
+  };
+  useEffect(() => {
+    
+    if (slicedData.length === 0) return;
+    const everyChecked = slicedData[currentPage - 1].every(
+      (item) => item.checked
+    );
+    if (everyChecked) {
+      setCheckAll(true);
+    } else {
+      setCheckAll(false);
+    }
+  }, [currentPage, slicedData]);
 
   return (
     <div className={styles.wrapper}>
@@ -38,7 +62,11 @@ const PromotionsTable = () => {
         <thead>
           <tr>
             <th>
-              <input type="checkbox" />
+              <input
+                onChange={(e) => handleCheckAll(e.target.checked)}
+                type="checkbox"
+                checked={checkAll}
+              />
             </th>
             <th>Категория</th>
             <th>Подкатегория</th>
@@ -48,18 +76,10 @@ const PromotionsTable = () => {
           </tr>
         </thead>
         <tbody>
-          {promotionsData.map((item) => (
-            <tr key={crypto.randomUUID()}>
-              <td>
-                <input type="checkbox" />
-              </td>
-              <td>{item.category}</td>
-              <td>{item.subcategory}</td>
-              <td>{item.brand}</td>
-              <td>{item.goods}</td>
-              <td>{item.cashback}</td>
-            </tr>
-          ))}
+          {slicedData.length &&
+            slicedData[currentPage - 1].map((item) => (
+              <PromotionsTableItem key={item.id} {...item} />
+            ))}
         </tbody>
       </table>
     </div>
