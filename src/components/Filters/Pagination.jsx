@@ -4,7 +4,8 @@ import styles from "./Pagination.module.scss";
 import { PromotionsContext } from "../../pages/PromotionsPage/context/PromotionsContext";
 
 const getPagesCount = (data, showItems) => {
-  return Math.ceil(data.length / showItems);
+  const res = Math.ceil(data.length / showItems);
+  return res > 0 ? res : 1;
 };
 
 const Pagination = ({ data }) => {
@@ -21,10 +22,10 @@ const Pagination = ({ data }) => {
   }, [showItems, data]);
 
   useEffect(() => {
-    if(currentPage > getPagesCount(data, showItems)){
-      changeCurrentPage(getPagesCount(data, showItems))
+    if (currentPage > getPagesCount(data, showItems)) {
+      changeCurrentPage(getPagesCount(data, showItems));
     }
-  }, [showItems]);
+  }, [showItems, data]);
 
   const nextPage = () => {
     if (currentPage === pagesCount) return;

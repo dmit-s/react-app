@@ -2,7 +2,10 @@ import PromotionsTop from "./components/PromotionsTop/PromotionsTop";
 import PromotionsTable from "./components/PromotionsTable/PromotionsTable";
 import PromotionsRemove from "./components/PromotionsRemove/PromotionsRemove";
 import PromotionsWrapper from "./components/PromotionsWrapper/PromotionsWrapper";
-import PromotionsContextProvider from "./context/PromotionsContext";
+import PromotionsContextProvider, {
+  PromotionsContext,
+} from "./context/PromotionsContext";
+import { useContext } from "react";
 
 const PromotionsPage = () => {
   return (

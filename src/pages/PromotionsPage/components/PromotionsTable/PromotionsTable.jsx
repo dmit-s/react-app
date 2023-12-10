@@ -4,15 +4,17 @@ import { PromotionsContext } from "../../context/PromotionsContext";
 import PromotionsTableItem from "./PromotionsTableItem";
 
 const sliceData = (data, showItems) => {
-  const res = [];
+  const slicedArr = [];
+
   for (let i = 0; i < data.length; i++) {
-    if (i === 0 || (i + 1 >= showItems && (i + 1) % 10 === 0)) {
-      res.push([data[i]]);
-    } else {
-      res[res.length - 1].push(data[i]);
+    if (i === 0) {
+      slicedArr.push(data.slice(i, showItems));
+    } else if (i % showItems === 0) {
+      slicedArr.push(data.slice(i, showItems + i));
     }
   }
-  return res;
+
+  return slicedArr;
 };
 
 const PromotionsTable = () => {
@@ -25,7 +27,10 @@ const PromotionsTable = () => {
   const [checkAll, setCheckAll] = useState(false);
 
   useEffect(() => {
-    setSlicedData((prevState) => sliceData(promotionsData, showItems));
+    setSlicedData(sliceData(promotionsData, showItems));
+    dispatch({
+      type: "UPDATE_CHECKED_COUNT",
+    });
   }, [promotionsData, showItems]);
 
   const handleCheckAll = (isChecked) => {
@@ -44,7 +49,6 @@ const PromotionsTable = () => {
     });
   };
   useEffect(() => {
-    
     if (slicedData.length === 0) return;
     const everyChecked = slicedData[currentPage - 1].every(
       (item) => item.checked
@@ -76,7 +80,7 @@ const PromotionsTable = () => {
           </tr>
         </thead>
         <tbody>
-          {slicedData.length &&
+          {Boolean(slicedData.length) &&
             slicedData[currentPage - 1].map((item) => (
               <PromotionsTableItem key={item.id} {...item} />
             ))}
