@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import SvgIcon from "../SvgIcon/SvgIcon";
 import styles from "./ShowFIlter.module.scss";
 import { PromotionsContext } from "../../pages/PromotionsPage/context/PromotionsContext";
+import Select from "../Select/Select";
 
 const getNumsArr = (data) => {
   const arr = [];
@@ -37,7 +38,7 @@ const ShowFilter = ({ data }) => {
   useEffect(() => {
     const numsArr = getNumsArr(data);
     setNumsArr(numsArr);
-    if (showItems > numsArr) {
+    if (showItems > numsArr[numsArr.length - 1]) {
       dispatch({
         type: "SET_SHOW_ITEMS",
         payload: numsArr[numsArr.length - 1],
