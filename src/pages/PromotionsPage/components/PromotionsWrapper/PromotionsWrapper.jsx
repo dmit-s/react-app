@@ -44,7 +44,7 @@ const PromotionsWrapper = ({ children }) => {
         getBrands(),
         getGoods(),
       ]).then(([categories, subcategories, brands, goods]) => {
-        setDataForModal([categories, subcategories, brands, goods]);
+        setDataForModal({ categories, subcategories, brands, goods });
       });
       document.body.classList.add("show-bg");
     } else {
@@ -52,10 +52,17 @@ const PromotionsWrapper = ({ children }) => {
     }
   }, [showModal]);
 
+  console.log(dataForModal);
+
   return (
     <>
       <div className={styles.wrapper}>{status === "received" && children}</div>
-      <Modal shouldShow={showModal} data={dataForModal}>
+      <Modal
+        onSave={onSave}
+        onRemove={onRemove}
+        shouldShow={showModal}
+        data={dataForModal}
+      >
         <div className={modalStyles.buttons}>
           <button onClick={onRemove} className={modalStyles.removeBtn}>
             Удалить
@@ -64,6 +71,7 @@ const PromotionsWrapper = ({ children }) => {
             Сохранить
           </button>
         </div>
+
         <div className={modalStyles.content}>
           <div className={modalStyles.item}>
             <span>Начисление кешбека с покупки</span>
@@ -71,50 +79,34 @@ const PromotionsWrapper = ({ children }) => {
               <input type="text" />
             </div>
           </div>
-          <div className={modalStyles.item}>
-            <span>Категория</span>
-            <Select
-              initialValue="EFEWF"
-              data={dataForModal[0]}
-              className={modalStyles.inputContainer}
-              type="categories"
-              setSelectActive={setSelectActive}
-              selectActive={selectActive}
-            />
-          </div>
-          <div className={modalStyles.item}>
-            <span>Подкатегория</span>
-            <Select
-              initialValue="EFEWF"
-              data={dataForModal[1]}
-              className={modalStyles.inputContainer}
-              type="subcategories"
-              setSelectActive={setSelectActive}
-              selectActive={selectActive}
-            />
-          </div>
-          <div className={modalStyles.item}>
-            <span>Бренд</span>
-            <Select
-              initialValue="EFEWF"
-              data={dataForModal[2]}
-              className={modalStyles.inputContainer}
-              type="brands"
-              setSelectActive={setSelectActive}
-              selectActive={selectActive}
-            />
-          </div>
-          <div className={modalStyles.item}>
-            <span>Товары</span>
-            <Select
-              initialValue="EFEWF"
-              data={dataForModal[3]}
-              className={modalStyles.inputContainer}
-              type="goods"
-              setSelectActive={setSelectActive}
-              selectActive={selectActive}
-            />
-          </div>
+          {Object.keys(dataForModal).map((k) => {
+            const title = () => {
+              switch (k) {
+                case "categories":
+                  return "Категория";
+                case "subcategories":
+                  return "Подкатегория";
+                case "brands":
+                  return "Бренды";
+                case "goods":
+                  return "Товары";
+              }
+            };
+
+            return (
+              <div className={modalStyles.item}>
+                <span>{title()}</span>
+                <Select
+                  initialValue={k}
+                  data={dataForModal[k]}
+                  className={modalStyles.inputContainer}
+                  type={k}
+                  setSelectActive={setSelectActive}
+                  selectActive={selectActive}
+                />
+              </div>
+            );
+          })}
         </div>
       </Modal>
     </>
