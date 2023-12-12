@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import SvgIcon from "../SvgIcon/SvgIcon";
 import styles from "./Select.module.scss";
 
@@ -9,7 +8,8 @@ const Select = ({
   activeSelect,
   type,
   changeActiveSelect,
-  changeFormData
+  changeFormData,
+  placeholder
 }) => {
   // const [currentValue, setCurrentValue] = useState(initialValue || "");
 
@@ -26,7 +26,7 @@ const Select = ({
     <div className={`${styles.wrapper} ${className}`}>
       <div className={styles.content}>
         <div onClick={toggleList} className={styles.currentValue}>
-          <input disabled type="text" value={currentValue} />
+          <input disabled type="text" value={currentValue} placeholder={placeholder}/>
           <SvgIcon iconName="chevron-down" />
         </div>
         <ul

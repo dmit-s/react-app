@@ -15,6 +15,7 @@ const Modal = ({ shouldShow, children, setShowModal }) => {
     }, 400);
   };
 
+
   useEffect(() => {
     if (closing) {
       document.body.classList.remove("show-bg");

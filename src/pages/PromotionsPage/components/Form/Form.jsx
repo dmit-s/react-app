@@ -5,7 +5,6 @@ import PromotionsService from "../../../../services/PromotionsService";
 import { PromotionsContext } from "../../context/PromotionsContext";
 
 const initialState = {
-  id: crypto.randomUUID(),
   category: "",
   subcategory: "",
   brand: "",
@@ -14,15 +13,27 @@ const initialState = {
   checked: false,
 };
 
-const Form = ({ promotionData }) => {
+const Form = ({ promotionData, setShowModal }) => {
   const {
     state: { promotionsData },
     dispatch,
   } = useContext(PromotionsContext);
 
-  const [formData, setFormData] = useState(promotionData || initialState);
+  const [formData, setFormData] = useState(
+    promotionData || {
+      ...initialState,
+      id: crypto.randomUUID(),
+    }
+  );
+  const [formErrors, setFormErrors] = useState({
+    cashback: "",
+    category: "",
+    subcategory: "",
+    brand: "",
+  });
   const [data, setData] = useState({});
   const [activeSelect, setActiveSelect] = useState("");
+  const [formIsValid, setFormIsValid] = useState(false);
 
   useEffect(() => {
     const { getCategories, getSubcategories, getBrands, getGoods } =
@@ -39,15 +50,42 @@ const Form = ({ promotionData }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    setFormData(initialState);
+
+    validateForm();
+    if (!formIsValid) return;
+
     const find = promotionsData.find((item) => item.id === formData.id);
     if (find) {
-      console.log("find");
       dispatch({ type: "UPDATE_PROMOTION", payload: formData });
     } else {
-      dispatch({ type: "ADD_PROMOTION", payload: formData });
+      const obj = {};
+
+      Object.keys(formData).forEach((key) => {
+        if (
+          typeof formData[key] === "string" &&
+          formData[key].trim().length === 0
+        ) {
+          obj[key] = "-";
+        } else if (key === "brand") {
+          obj[key] = `${formData[key]}%`;
+        } else {
+          obj[key] = formData[key];
+        }
+      });
+
+      dispatch({
+        type: "ADD_PROMOTION",
+        payload: obj,
+      });
     }
-    console.log(formData, promotionsData);
+
+    setShowModal(false);
+    document.body.classList.remove("show-bg");
+
+    setFormData({
+      ...initialState,
+      id: crypto.randomUUID(),
+    });
   };
 
   const changeActiveSelect = (type) => {
@@ -63,6 +101,38 @@ const Form = ({ promotionData }) => {
     });
   };
 
+  console.log(formErrors);
+
+  const validateForm = () => {
+    Object.keys(formData).forEach((key) => {
+      
+
+      switch (key) {
+       
+        case "cashback":
+          if (formData[key].trim().length === 0) {
+            setFormErrors((prevState) => ({...prevState, [key]: "This field is required"}));
+            setFormIsValid(false);
+          }
+        case "category":
+          if (formData[key].trim().length === 0) {
+            setFormErrors((prevState) => ({...prevState, [key]: "This field is required"}));
+            setFormIsValid(false);
+          }
+        case "subcategory":
+          console.log(key);
+          if (formData[key].trim().length === 0) {
+            setFormErrors((prevState) => ({...prevState, [key]: "This field is required"}));
+            setFormIsValid(false);
+          }
+        case "brand":
+          if (formData[key].trim().length === 0) {
+            setFormErrors((prevState) => ({...prevState, [key]: "This field is required"}));
+            setFormIsValid(false);
+          }
+      }
+    });
+  };
 
   return (
     <form onSubmit={onSubmit} className={styles.form}>
@@ -76,8 +146,11 @@ const Form = ({ promotionData }) => {
           <div className={styles.inputContainer}>
             <input
               type="text"
+              onInput={(e) =>
+                (e.target.value = e.target.value.replace(/[^\d]/g, ""))
+              }
               onChange={(e) => changeFormData("cashback", e.target.value)}
-              value={formData['cashback']}
+              value={formData["cashback"]}
             />
           </div>
         </div>

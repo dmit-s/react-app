@@ -29,7 +29,7 @@ const PromotionsTop = () => {
       <button onClick={openModal} className={styles.addBtn}>Добавить акцию</button>
 
       <Modal shouldShow={showModal} setShowModal={setShowModal}>
-        <Form />
+        <Form setShowModal={setShowModal}/>
       </Modal>
     </div>
   );
