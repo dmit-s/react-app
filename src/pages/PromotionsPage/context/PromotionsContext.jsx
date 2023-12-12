@@ -78,6 +78,16 @@ const reducer = (state, action) => {
       return {
         ...state,
       };
+    case "UPDATE_PROMOTION":
+      return {
+        ...state,
+        promotionsData: state.promotionsData.map(item => item.id === payload.id ? payload : item)
+      }
+    case "ADD_PROMOTION":
+      return {
+        ...state,
+        promotionsData: [payload, ...state.promotionsData]
+      }
   }
 };
 

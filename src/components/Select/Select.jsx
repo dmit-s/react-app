@@ -5,22 +5,21 @@ import styles from "./Select.module.scss";
 const Select = ({
   data,
   className,
-  initialValue,
-  setSelectActive,
-  selectActive,
+  currentValue,
+  activeSelect,
   type,
+  changeActiveSelect,
+  changeFormData
 }) => {
-  const [currentValue, setCurrentValue] = useState(initialValue || "");
-  const [showList, setShowList] = useState(false);
+  // const [currentValue, setCurrentValue] = useState(initialValue || "");
 
   const handleClick = (text) => {
-    setCurrentValue(text);
-    setSelectActive("");
+    changeFormData(type, text);
+    changeActiveSelect("");
   };
 
   const toggleList = () => {
-    setShowList(!showList);
-    setSelectActive(selectActive === type ? "" : type);
+    changeActiveSelect(type);
   };
 
   return (
@@ -31,7 +30,7 @@ const Select = ({
           <SvgIcon iconName="chevron-down" />
         </div>
         <ul
-          className={`${styles.list} ${selectActive === type && styles.active}`}
+          className={`${styles.list} ${activeSelect === type && styles.active}`}
         >
           {data &&
             data.map((item, index) => (
