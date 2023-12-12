@@ -18,13 +18,13 @@ body {
 
   &.show-bg {
     &::after {
-      display: block;
+      visibility: visible;
+      opacity: 1;
     }
   }
 
   &::after {
     content: "";
-    display: none;
     position: absolute;
     top: 0;
     left: 0;
@@ -32,6 +32,9 @@ body {
     bottom: 0;
     z-index: 1;
     background-color: rgb(0 0 0 / 80%);
+    transition: .4s;
+    visibility: hidden;
+    opacity: 0;
   }
 }
 

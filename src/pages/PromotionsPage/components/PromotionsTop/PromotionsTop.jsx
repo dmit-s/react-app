@@ -15,12 +15,11 @@ const PromotionsTop = () => {
   useEffect(() => {
     if (showModal) {
       document.body.classList.add("show-bg");
-    } else {
-      document.body.classList.remove("show-bg");
     }
   }, [showModal]);
 
-  const openModal = () => {
+  const openModal = (e) => {
+    e.stopPropagation();
     setShowModal(true);
   };
 
@@ -29,7 +28,7 @@ const PromotionsTop = () => {
       <Filters data={promotionsData} />
       <button onClick={openModal} className={styles.addBtn}>Добавить акцию</button>
 
-      <Modal shouldShow={showModal}>
+      <Modal shouldShow={showModal} setShowModal={setShowModal}>
         <Form />
       </Modal>
     </div>
