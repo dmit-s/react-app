@@ -13,17 +13,19 @@ const initialState = {
   checked: false,
 };
 
-const Form = ({ promotionData, setShowModal }) => {
+const Form = ({ setShowModal, data }) => {
   const {
     state: { promotionsData },
     dispatch,
   } = useContext(PromotionsContext);
 
   const [formData, setFormData] = useState(
-    promotionData || {
-      ...initialState,
-      id: crypto.randomUUID(),
-    }
+    data
+      ? { ...data }
+      : {
+          ...initialState,
+          id: crypto.randomUUID(),
+        }
   );
   const [formErrors, setFormErrors] = useState({
     cashback: "",
@@ -31,9 +33,8 @@ const Form = ({ promotionData, setShowModal }) => {
     subcategory: "",
     brand: "",
   });
-  const [data, setData] = useState({});
+  const [dataForSelect, setDataForSelect] = useState({});
   const [activeSelect, setActiveSelect] = useState("");
-  const [formIsValid, setFormIsValid] = useState(false);
 
   useEffect(() => {
     const { getCategories, getSubcategories, getBrands, getGoods } =
@@ -44,38 +45,34 @@ const Form = ({ promotionData, setShowModal }) => {
       getBrands(),
       getGoods(),
     ]).then(([categories, subcategories, brands, goods]) => {
-      setData({ categories, subcategories, brands, goods });
+      setDataForSelect({ categories, subcategories, brands, goods });
     });
   }, []);
 
+  const onRemove = (e) => {
+    e.preventDefault();
+    if(!data) return;
+    dispatch({ type: "REMOVE_PROMOTION", payload: formData.id });
+    setShowModal(false);
+    document.body.classList.remove("show-bg");
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
-
-    validateForm();
-    if (!formIsValid) return;
-
+    setFormErrors({
+      cashback: "",
+      category: "",
+      subcategory: "",
+      brand: "",
+    });
+    if (!validateForm()) return;
     const find = promotionsData.find((item) => item.id === formData.id);
     if (find) {
       dispatch({ type: "UPDATE_PROMOTION", payload: formData });
     } else {
-      const obj = {};
-
-      Object.keys(formData).forEach((key) => {
-        if (
-          typeof formData[key] === "string" &&
-          formData[key].trim().length === 0
-        ) {
-          obj[key] = "-";
-        } else if (key === "brand") {
-          obj[key] = `${formData[key]}%`;
-        } else {
-          obj[key] = formData[key];
-        }
-      });
-
       dispatch({
         type: "ADD_PROMOTION",
-        payload: obj,
+        payload: formData,
       });
     }
 
@@ -99,45 +96,65 @@ const Form = ({ promotionData, setShowModal }) => {
         [name]: value,
       };
     });
+    setFormErrors({ ...formErrors, [name]: "" });
   };
 
-  console.log(formErrors);
-
   const validateForm = () => {
-    Object.keys(formData).forEach((key) => {
-      
+    let isValid = true;
 
+    Object.keys(formData).forEach((key) => {
       switch (key) {
-       
         case "cashback":
           if (formData[key].trim().length === 0) {
-            setFormErrors((prevState) => ({...prevState, [key]: "This field is required"}));
-            setFormIsValid(false);
+            setFormErrors((prevState) => ({
+              ...prevState,
+              [key]: "This field is required",
+            }));
+            isValid = false;
           }
         case "category":
           if (formData[key].trim().length === 0) {
-            setFormErrors((prevState) => ({...prevState, [key]: "This field is required"}));
-            setFormIsValid(false);
+            setFormErrors((prevState) => ({
+              ...prevState,
+              [key]: "This field is required",
+            }));
+            isValid = false;
           }
         case "subcategory":
-          console.log(key);
           if (formData[key].trim().length === 0) {
-            setFormErrors((prevState) => ({...prevState, [key]: "This field is required"}));
-            setFormIsValid(false);
+            setFormErrors((prevState) => ({
+              ...prevState,
+              [key]: "This field is required",
+            }));
+            isValid = false;
           }
         case "brand":
           if (formData[key].trim().length === 0) {
-            setFormErrors((prevState) => ({...prevState, [key]: "This field is required"}));
-            setFormIsValid(false);
+            setFormErrors((prevState) => ({
+              ...prevState,
+              [key]: "This field is required",
+            }));
+            isValid = false;
           }
       }
     });
+
+    return isValid;
+  };
+
+  const handleChange = (e) => {
+    changeFormData("cashback", e.target.value);
+    if (e.target.value.length > 0) {
+      setFormErrors({ ...formErrors, cashback: "" });
+    }
   };
 
   return (
     <form onSubmit={onSubmit} className={styles.form}>
       <div className={styles.buttons}>
-        <button className={styles.removeBtn}>Удалить</button>
+        <button onClick={onRemove} className={styles.removeBtn} type="button">
+          Удалить
+        </button>
         <button className={styles.saveBtn}>Сохранить</button>
       </div>
       <div className={styles.content}>
@@ -149,10 +166,11 @@ const Form = ({ promotionData, setShowModal }) => {
               onInput={(e) =>
                 (e.target.value = e.target.value.replace(/[^\d]/g, ""))
               }
-              onChange={(e) => changeFormData("cashback", e.target.value)}
+              onChange={handleChange}
               value={formData["cashback"]}
             />
           </div>
+          <small style={{ color: "red" }}>{formErrors["cashback"]}</small>
         </div>
         <div className={styles.item}>
           <label>Категория</label>
@@ -160,7 +178,7 @@ const Form = ({ promotionData, setShowModal }) => {
             className={styles.inputContainer}
             placeholder="Название категории"
             type="category"
-            data={data.categories}
+            dataForSelect={dataForSelect.categories}
             setFormData={setFormData}
             formData={formData}
             activeSelect={activeSelect}
@@ -168,6 +186,7 @@ const Form = ({ promotionData, setShowModal }) => {
             changeFormData={changeFormData}
             currentValue={formData["category"]}
           />
+          <small style={{ color: "red" }}>{formErrors["category"]}</small>
         </div>
         <div className={styles.item}>
           <label>Подкатегория</label>
@@ -175,7 +194,7 @@ const Form = ({ promotionData, setShowModal }) => {
             className={styles.inputContainer}
             placeholder="Название подкатегории"
             type="subcategory"
-            data={data.subcategories}
+            dataForSelect={dataForSelect.subcategories}
             setFormData={setFormData}
             formData={formData}
             activeSelect={activeSelect}
@@ -183,15 +202,15 @@ const Form = ({ promotionData, setShowModal }) => {
             changeFormData={changeFormData}
             currentValue={formData["subcategory"]}
           />
+          <small style={{ color: "red" }}>{formErrors["subcategory"]}</small>
         </div>
         <div className={styles.item}>
           <label>Бренд</label>
-
           <Select
             className={styles.inputContainer}
             placeholder="Имя бренда"
             type="brand"
-            data={data.brands}
+            dataForSelect={dataForSelect.brands}
             setFormData={setFormData}
             formData={formData}
             activeSelect={activeSelect}
@@ -199,6 +218,7 @@ const Form = ({ promotionData, setShowModal }) => {
             changeFormData={changeFormData}
             currentValue={formData["brand"]}
           />
+          <small style={{ color: "red" }}>{formErrors["brand"]}</small>
         </div>
       </div>
     </form>

@@ -15,6 +15,18 @@ const Modal = ({ shouldShow, children, setShowModal }) => {
     }, 400);
   };
 
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === "Escape") {
+        onClickOutside();
+      }
+    };
+
+    document.addEventListener("keyup", handleKey);
+    return () => {
+      document.removeEventListener("keyup", handleKey);
+    };
+  }, []);
 
   useEffect(() => {
     if (closing) {

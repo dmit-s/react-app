@@ -17,7 +17,7 @@ const sliceData = (data, showItems) => {
   return slicedArr;
 };
 
-const PromotionsTable = () => {
+const PromotionsTable = ({openModal}) => {
   const {
     state: { promotionsData, showItems, currentPage },
     dispatch,
@@ -82,7 +82,7 @@ const PromotionsTable = () => {
         <tbody>
           {Boolean(slicedData.length) &&
             slicedData[currentPage - 1].map((item) => (
-              <PromotionsTableItem key={item.id} {...item} />
+              <PromotionsTableItem key={item.id} {...item} openModal={openModal}/>
             ))}
         </tbody>
       </table>

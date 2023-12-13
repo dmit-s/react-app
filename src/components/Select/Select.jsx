@@ -2,7 +2,7 @@ import SvgIcon from "../SvgIcon/SvgIcon";
 import styles from "./Select.module.scss";
 
 const Select = ({
-  data,
+  dataForSelect,
   className,
   currentValue,
   activeSelect,
@@ -32,8 +32,8 @@ const Select = ({
         <ul
           className={`${styles.list} ${activeSelect === type && styles.active}`}
         >
-          {data &&
-            data.map((item, index) => (
+          {dataForSelect &&
+            dataForSelect.map((item, index) => (
               <li key={index} onClick={(e) => handleClick(e.target.innerText)}>
                 {item}
               </li>

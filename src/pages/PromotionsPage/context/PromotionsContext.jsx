@@ -88,6 +88,11 @@ const reducer = (state, action) => {
         ...state,
         promotionsData: [payload, ...state.promotionsData]
       }
+    case "REMOVE_PROMOTION":
+      return {
+        ...state,
+        promotionsData: state.promotionsData.filter(item => item.id !== payload)
+      }
   }
 };
 

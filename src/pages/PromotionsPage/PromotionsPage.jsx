@@ -1,20 +1,10 @@
-import PromotionsTop from "./components/PromotionsTop/PromotionsTop";
-import PromotionsTable from "./components/PromotionsTable/PromotionsTable";
-import PromotionsRemove from "./components/PromotionsRemove/PromotionsRemove";
 import PromotionsWrapper from "./components/PromotionsWrapper/PromotionsWrapper";
-import PromotionsContextProvider, {
-  PromotionsContext,
-} from "./context/PromotionsContext";
-import { useContext } from "react";
+import PromotionsContextProvider from "./context/PromotionsContext";
 
 const PromotionsPage = () => {
   return (
     <PromotionsContextProvider>
-      <PromotionsWrapper>
-        <PromotionsTop />
-        <PromotionsTable />
-        <PromotionsRemove />
-      </PromotionsWrapper>
+      <PromotionsWrapper />
     </PromotionsContextProvider>
   );
 };

@@ -5,8 +5,10 @@
 
   .select {
     display: flex;
+    justify-content: space-between;
     border: 1px solid #d0d3da;
-    padding: 0 0.8rem;
+    padding: 0 .6rem;
+    min-width: 4.2rem;
     height: 32px;
     outline: 0;
     border-radius: 4px;
@@ -20,10 +22,15 @@
     .currentValue {
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      width: 100%;
 
       span {
         font-size: 1.3rem;
-        margin-right: 0.8rem;
+      }
+
+      svg{
+        margin-left: .5rem;
       }
     }
 

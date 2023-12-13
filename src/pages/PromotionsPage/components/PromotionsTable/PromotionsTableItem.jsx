@@ -9,6 +9,7 @@ const PromotionsTableItem = ({
   goods,
   cashback,
   checked,
+  openModal
 }) => {
   const {
     state: { promotionsData },
@@ -23,15 +24,15 @@ const PromotionsTableItem = ({
   };
 
   return (
-    <tr>
+    <tr onClick={(e) => openModal(e, id)}>
       <td>
-        <input onChange={handleChange} type="checkbox" checked={checked} />
+        <input onClick={(e) => e.stopPropagation()} onChange={handleChange} type="checkbox" checked={checked} />
       </td>
-      <td>{category}</td>
-      <td>{subcategory}</td>
-      <td>{brand}</td>
-      <td>{goods}</td>
-      <td>{cashback}</td>
+      <td>{category || "-"}</td>
+      <td>{subcategory || "-"}</td>
+      <td>{brand || "-"}</td>
+      <td>{goods || "-"}</td>
+      <td>{cashback ? `${cashback}%` : "-"}</td>
     </tr>
   );
 };
