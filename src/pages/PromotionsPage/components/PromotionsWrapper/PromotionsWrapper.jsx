@@ -6,7 +6,21 @@ import PromotionsTable from "../PromotionsTable/PromotionsTable";
 import PromotionsRemove from "../PromotionsRemove/PromotionsRemove";
 import PromotionsTop from "../PromotionsTop/PromotionsTop";
 import Modal from "../../../../components/Modal/Modal";
-import Form from "../Form/Form";
+import FormInput from "../../../../components/Form/FormInput";
+import Form from "../../../../components/Form/Form";
+import FormSelect from "../../../../components/Form/FormSelect";
+
+const getFormDataInitialState = () => {
+  return {
+    id: crypto.randomUUID(),
+    category: "",
+    subcategory: "",
+    brand: "",
+    goods: "",
+    cashback: "",
+    checked: false,
+  };
+};
 
 const PromotionsWrapper = () => {
   const {
@@ -15,7 +29,13 @@ const PromotionsWrapper = () => {
   } = useContext(PromotionsContext);
 
   const [showModal, setShowModal] = useState(false);
-  const [dataForModal, setDataForModal] = useState(null);
+
+  // form
+  const [formData, setFormData] = useState({...getFormDataInitialState()});
+  const [activeSelect, setActiveSelect] = useState("");
+  const [dataForSelect, setDataForSelect] = useState([]);
+
+  console.log(formData);
 
   useEffect(() => {
     PromotionsService.getPromotions()
@@ -26,6 +46,33 @@ const PromotionsWrapper = () => {
         dispatch({ type: "SET_ERROR", payload: err });
         console.error(err);
       });
+
+    const { getCategories, getSubcategories, getBrands, getGoods } =
+      PromotionsService;
+    Promise.all([
+      getCategories(),
+      getSubcategories(),
+      getBrands(),
+      getGoods(),
+    ]).then(([categories, subcategories, brands, goods]) => {
+      setDataForSelect({
+        category: {
+          title: "Категория",
+          placeholder: "Название категории",
+          data: [...categories],
+        },
+        subcategory: {
+          title: "Подкатегория",
+          placeholder: "Название подкатегории",
+          data: [...subcategories],
+        },
+        brand: {
+          title: "Бренд",
+          placeholder: "Имя бренда",
+          data: [...brands],
+        },
+      });
+    });
   }, []);
 
   useEffect(() => {
@@ -38,10 +85,34 @@ const PromotionsWrapper = () => {
     e.stopPropagation();
     setShowModal(true);
     if (id) {
-      setDataForModal({...promotionsData.find((item) => item.id === id)});
+      setFormData({ ...promotionsData.find((item) => item.id === id) });
     } else {
-      setDataForModal(null);
+      setFormData(null);
     }
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+    const find = promotionsData.find((item) => item.id === formData.id);
+
+    if (find) {
+      dispatch({ type: "UPDATE_PROMOTION", payload: formData });
+    } else {
+      dispatch({
+        type: "ADD_PROMOTION",
+        payload: formData,
+      });
+    }
+
+    setFormData(getFormDataInitialState());
+
+    setShowModal(false);
+    document.body.classList.remove("show-bg");
+  };
+
+  const toggleSelect = (selectName) => {
+    setActiveSelect(activeSelect === selectName ? "" : selectName);
   };
 
   return (
@@ -54,7 +125,29 @@ const PromotionsWrapper = () => {
             <PromotionsRemove />
 
             <Modal shouldShow={showModal} setShowModal={setShowModal}>
-              <Form showModal={showModal} setShowModal={setShowModal} data={dataForModal} />
+              <Form onSubmit={onSubmit}>
+                <FormInput
+                  title="Начисление кешбека с покупки"
+                  inputType="text"
+                  placeholder="20%"
+                  initialValue="hello"
+                  error="This field is required"
+                  handleInput={(e) =>
+                    (e.target.value = e.target.value.replace(/[^\d]/g, ""))
+                  }
+                />
+                {Object.entries(dataForSelect).map(([key, value]) => (
+                  <FormSelect
+                    key={key}
+                    title={value.title}
+                    name={key}
+                    activeSelect={activeSelect}
+                    placeholder={value.placeholder}
+                    error="This field is required"
+                    toggleSelect={toggleSelect}
+                  />
+                ))}
+              </Form>
             </Modal>
           </>
         )}
