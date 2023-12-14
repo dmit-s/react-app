@@ -1,19 +1,19 @@
 import SvgIcon from "../SvgIcon/SvgIcon";
 import styles from "./FormSelect.module.scss";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const FormSelect = ({
   name,
   activeSelect,
-  initialValue,
+  value,
   title,
   error,
   placeholder,
   toggleSelect,
+  optionsData,
+  updateFormData
 }) => {
-  const [value, setValue] = useState(initialValue || "");
-  const [optionsData, setOptionsData] = useState([]);
 
   const showList = () => {
     toggleSelect(name);
@@ -21,7 +21,8 @@ const FormSelect = ({
 
   const handleClick = (e) => {
     e.stopPropagation();
-    setValue(e.target.innerText);
+    const value = e.target.dataset.value;
+    updateFormData(name, value);
     toggleSelect(name);
   }
 
@@ -40,9 +41,9 @@ const FormSelect = ({
         </div>
         {activeSelect === name && (
           <ul className={styles.selectOptions}>
-            <li onClick={handleClick} className={styles.selectOption}>1</li>
-            <li onClick={handleClick} className={styles.selectOption}>1</li>
-            <li onClick={handleClick} className={styles.selectOption}>1</li>
+            {optionsData && optionsData.map(item => (
+              <li key={item} onClick={handleClick} className={styles.selectOption} data-value={item}>{item}</li>
+            ))}
           </ul>
         )}
       </div>
