@@ -1,6 +1,11 @@
 .wrapper{
+    padding: 2.4rem 0;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     align-items: flex-end;
+
+    .searchForm{
+        margin-bottom: 2.4rem;
+    }
 }

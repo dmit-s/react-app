@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { PromotionsContext } from "../../context/PromotionsContext";
 
-const PromotionsTableItem = ({
+const TableItem = ({
   id,
   category,
   subcategory,
@@ -37,4 +37,4 @@ const PromotionsTableItem = ({
   );
 };
 
-export default PromotionsTableItem;
+export default TableItem;

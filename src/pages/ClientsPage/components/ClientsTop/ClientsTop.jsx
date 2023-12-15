@@ -14,7 +14,7 @@ const ClientsTop = () => {
 
   return (
     <div className={styles.wrapper}>
-        <Search />
+        <Search className={styles.searchForm}/>
         <Filters>
           <ShowFilter
             data={clientsData}

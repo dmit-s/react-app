@@ -3,7 +3,7 @@ import styles from "./Search.module.scss";
 
 import { useState } from "react";
 
-const Search = () => {
+const Search = ({ onSubmit, className, placeholder}) => {
   const [value, setValue] = useState("");
 
   const handleChange = (e) => {
@@ -11,13 +11,13 @@ const Search = () => {
   };
 
   return (
-    <div className={styles.wrapper}>
+    <form onSubmit={onSubmit} className={`${styles.wrapper} ${className || ""}`}>
       <SvgIcon iconName="search" svgClass={styles.searchIcon} />
-      <input onChange={handleChange} type="text" value={value} />
-      <button className={styles.clearBtn}>
+      <input onChange={handleChange} type="text" value={value} placeholder={placeholder || ""}/>
+      <button className={styles.clearBtn} type="reset">
         <SvgIcon iconName="xmark"/>
       </button>
-    </div>
+    </form>
   );
 };
 

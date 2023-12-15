@@ -1,7 +1,9 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import styles from "../../../../styles/table.module.scss";
+import { useContext, useEffect, useState } from "react";
+import Table from "../../../../components/Table/Table";
+import purpleBtn from "../../../../styles/purpleBtn.module.scss";
 import { PromotionsContext } from "../../context/PromotionsContext";
-import PromotionsTableItem from "./PromotionsTableItem";
+import PromotionsRemove from "../PromotionsRemove/PromotionsRemove";
+import TableItem from "../../../../components/Table/components/TableItem/TableItem";
 
 const sliceData = (data, showItems) => {
   const slicedArr = [];
@@ -17,7 +19,9 @@ const sliceData = (data, showItems) => {
   return slicedArr;
 };
 
-const PromotionsTable = ({openModal}) => {
+
+
+const PromotionsTable = ({ data, openModal }) => {
   const {
     state: { promotionsData, showItems, currentPage },
     dispatch,
@@ -27,11 +31,13 @@ const PromotionsTable = ({openModal}) => {
   const [checkAll, setCheckAll] = useState(false);
 
   useEffect(() => {
-    setSlicedData(sliceData(promotionsData, showItems));
-    dispatch({
-      type: "UPDATE_CHECKED_COUNT",
-    });
-  }, [promotionsData, showItems]);
+      setSlicedData(sliceData(promotionsData, showItems));
+
+      dispatch({
+        type: "UPDATE_CHECKED_COUNT",
+      });
+    }, [promotionsData, showItems]);
+
 
   const handleCheckAll = (isChecked) => {
     setCheckAll(isChecked);
@@ -60,32 +66,47 @@ const PromotionsTable = ({openModal}) => {
     }
   }, [currentPage, slicedData]);
 
+  const createHeaders = () => {
+    return (
+      <>
+        <th>
+          <input
+            onChange={(e) => handleCheckAll(e.target.checked)}
+            type="checkbox"
+            checked={checkAll}
+          />
+        </th>
+        <th>Категория</th>
+        <th>Подкатегория</th>
+        <th>Бренд</th>
+        <th>Товары</th>
+        <th>Кешбек</th>
+      </>
+    );
+  };
+
+  const createItems = () => {
+    slicedData[currentPage - 1].map(item => (
+      <tr onClick={(e) => openModal(e, id)}>
+      <td>
+        <input onClick={(e) => e.stopPropagation()} onChange={handleChange} type="checkbox" checked={checked} />
+      </td>
+      <td>{category || "-"}</td>
+      <td>{subcategory || "-"}</td>
+      <td>{brand || "-"}</td>
+      <td>{goods || "-"}</td>
+      <td>{cashback ? `${cashback}%` : "-"}</td>
+    </tr>
+    ))
+  }
+
   return (
-    <div className={styles.wrapper}>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>
-              <input
-                onChange={(e) => handleCheckAll(e.target.checked)}
-                type="checkbox"
-                checked={checkAll}
-              />
-            </th>
-            <th>Категория</th>
-            <th>Подкатегория</th>
-            <th>Бренд</th>
-            <th>Товары</th>
-            <th>Кешбек</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Boolean(slicedData.length) &&
-            slicedData[currentPage - 1].map((item) => (
-              <PromotionsTableItem key={item.id} {...item} openModal={openModal}/>
-            ))}
-        </tbody>
-      </table>
+    <div>
+      <button onClick={openModal} className={purpleBtn.wrapper}>
+        Добавить акцию
+      </button>
+      <Table currentPage={currentPage} headers={createHeaders()} data={slicedData[currentPage - 1]}/>
+      <PromotionsRemove />
     </div>
   );
 };

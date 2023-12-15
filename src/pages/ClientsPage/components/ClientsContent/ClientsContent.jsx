@@ -1,6 +1,6 @@
 import ClientsTop from "../ClientsTop/ClientsTop";
 
-const ClientsWrapper = () => {
+const ClientsContent = () => {
   return (
     <>
       <ClientsTop />
@@ -8,4 +8,4 @@ const ClientsWrapper = () => {
   );
 };
 
-export default ClientsWrapper;
+export default ClientsContent;
