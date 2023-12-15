@@ -1,38 +1,36 @@
+import styles from "./ClientsTop.module.scss";
 import { useContext } from "react";
-import styles from "./PromotionsTop.module.scss";
-import { PromotionsContext } from "../../context/PromotionsContext";
-import ShowFilter from "../../../../components/Filters/Filters/components/ShowFilter/ShowFilter";
 import Pagination from "../../../../components/Filters/Filters/components/Pagination/Pagination";
+import ShowFilter from "../../../../components/Filters/Filters/components/ShowFilter/ShowFilter";
+import Search from "../../../../components/Search/Search";
+import { ClientsContext } from "../../context/ClientsContext";
 import Filters from "../../../../components/Filters/Filters/Filters";
 
-const PromotionsTop = ({ openModal }) => {
+const ClientsTop = () => {
   const {
-    state: { promotionsData, currentPage, pagesCount, showItems },
+    state: { clientsData, currentPage, pagesCount, showItems },
     dispatch,
-  } = useContext(PromotionsContext);
+  } = useContext(ClientsContext);
 
   return (
     <div className={styles.wrapper}>
+        <Search />
         <Filters>
           <ShowFilter
-            data={promotionsData}
+            data={clientsData}
             showItems={showItems}
             dispatch={dispatch}
           />
           <Pagination
-            data={promotionsData}
+            data={clientsData}
             currentPage={currentPage}
             pagesCount={pagesCount}
             showItems={showItems}
             dispatch={dispatch}
           />
         </Filters>
-
-      <button onClick={openModal} className={styles.addBtn}>
-        Добавить акцию
-      </button>
     </div>
   );
 };
 
-export default PromotionsTop;
+export default ClientsTop;

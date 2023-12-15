@@ -1,7 +1,11 @@
+import ClientsWrapper from "./components/ClientsWrapper/ClientsWrapper";
+import { ClientsContextProvider } from "./context/ClientsContext";
 const ClientsPage = () => {
-    return ( <div>
-        CLIENTS
-    </div> );
-}
- 
+  return (
+    <ClientsContextProvider>
+      <ClientsWrapper />
+    </ClientsContextProvider>
+  );
+};
+
 export default ClientsPage;

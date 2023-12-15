@@ -1,0 +1,26 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+
+  .notificationsBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 4rem;
+    width: 4rem;
+    background-color: #ebecef;
+    border-radius: 4px;
+    margin-right: 1.6rem;
+
+    svg {
+      width: 1.8rem;
+      height: 1.8rem;
+      fill: #414348;
+    }
+  }
+
+  .userInfo {
+    color: #434652;
+    font-size: 1.4rem;
+  }
+}
