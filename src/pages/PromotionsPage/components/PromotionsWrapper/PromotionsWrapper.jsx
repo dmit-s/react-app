@@ -9,6 +9,7 @@ import Modal from "../../../../components/Modal/Modal";
 import FormInput from "../../../../components/Form/FormInput";
 import Form from "../../../../components/Form/Form";
 import FormSelect from "../../../../components/Form/FormSelect";
+import Table from "../../../../components/Table/Table";
 
 const getFormDataInitialState = () => ({
   id: crypto.randomUUID(),
@@ -29,7 +30,7 @@ const gerFormErrorsInitialState = () => ({
 
 const PromotionsWrapper = () => {
   const {
-    state: { promotionsData, status },
+    state: { promotionsData, status, showItems, currentPage },
     dispatch,
   } = useContext(PromotionsContext);
 
@@ -151,14 +152,35 @@ const PromotionsWrapper = () => {
     }
   };
 
+  const handleRemove = () => {
+    const filteredArr = promotionsData.filter((el) => !el.checked);
+    dispatch({ type: "SET_PROMOTIONS", payload: filteredArr });
+  };
+
   return (
     <>
       <div className={styles.wrapper}>
         {status === "received" && (
           <>
             <PromotionsTop openModal={openModal} />
-            <PromotionsTable openModal={openModal} />
-            <PromotionsRemove />
+            {/* <PromotionsTable openModal={openModal} />
+            <PromotionsRemove /> */}
+            <Table
+              adding={true}
+              headers={{
+                category: "Категория",
+                subcategory: "Подкатегория",
+                brand: "Бренд",
+                goods: "Товары",
+                cashback: "Кешбек",
+              }}
+              data={promotionsData}
+              showItems={showItems}
+              currentPage={currentPage}
+              handleAddItem={openModal}
+              selectable={true}
+              handleRemove={handleRemove}
+            />
             <Modal shouldShow={showModal} setShowModal={setShowModal}>
               <Form onSubmit={onSubmit} onRemove={onRemove}>
                 <FormInput

@@ -27,9 +27,9 @@ const PromotionsTop = ({ openModal }) => {
           dispatch={dispatch}
         />
       </Filters>
-      <button onClick={openModal} className={styles.addBtn}>
+      {/* <button onClick={openModal} className={styles.addBtn}>
         Добавить акцию
-      </button>
+      </button> */}
     </div>
   );
 };

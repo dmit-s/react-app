@@ -1,24 +1,13 @@
-import { useContext, useEffect, useState } from "react";
-import styles from "./PromotionsRemove.module.scss";
-import { PromotionsContext } from "../../context/PromotionsContext";
-import SvgIcon from "../../../../components/SvgIcon/SvgIcon";
+import styles from "./DeletionBlock.module.scss";
+import SvgIcon from "../../../SvgIcon/SvgIcon";
+import { useEffect, useState } from "react";
 
-const PromotionsRemove = () => {
-  const {
-    state: { promotionsData, checkedCount },
-    dispatch,
-  } = useContext(PromotionsContext);
-
+const DeletionBlock = ({ checkedCount, handleRemove }) => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
     Boolean(checkedCount) ? setShow(true) : setShow(false);
   }, [checkedCount]);
-
-  const handleRemove = () => {
-    const filteredArr = promotionsData.filter((el) => !el.checked);
-    dispatch({ type: "SET_PROMOTIONS", payload: filteredArr });
-  };
 
   return (
     <div className={`${styles.wrapper} ${show && styles.show}`}>
@@ -36,4 +25,4 @@ const PromotionsRemove = () => {
   );
 };
 
-export default PromotionsRemove;
+export default DeletionBlock;
