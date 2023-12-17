@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { PromotionsContext } from "../../context/PromotionsContext";
 
-const TableItem = ({
+const PromotionsTableItem = ({
   id,
   category,
   subcategory,
@@ -9,7 +9,7 @@ const TableItem = ({
   goods,
   cashback,
   checked,
-  openModal
+  openModal,
 }) => {
   const {
     state: { promotionsData },
@@ -26,7 +26,12 @@ const TableItem = ({
   return (
     <tr onClick={(e) => openModal(e, id)}>
       <td>
-        <input onClick={(e) => e.stopPropagation()} onChange={handleChange} type="checkbox" checked={checked} />
+        <input
+          onClick={(e) => e.stopPropagation()}
+          onChange={handleChange}
+          type="checkbox"
+          checked={checked}
+        />
       </td>
       <td>{category || "-"}</td>
       <td>{subcategory || "-"}</td>
@@ -37,4 +42,4 @@ const TableItem = ({
   );
 };
 
-export default TableItem;
+export default PromotionsTableItem;

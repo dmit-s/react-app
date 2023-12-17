@@ -13,21 +13,20 @@ const PromotionsTop = ({ openModal }) => {
 
   return (
     <div className={styles.wrapper}>
-        <Filters>
-          <ShowFilter
-            data={promotionsData}
-            showItems={showItems}
-            dispatch={dispatch}
-          />
-          <Pagination
-            data={promotionsData}
-            currentPage={currentPage}
-            pagesCount={pagesCount}
-            showItems={showItems}
-            dispatch={dispatch}
-          />
-        </Filters>
-
+      <Filters>
+        <ShowFilter
+          data={promotionsData}
+          showItems={showItems}
+          dispatch={dispatch}
+        />
+        <Pagination
+          data={promotionsData}
+          currentPage={currentPage}
+          pagesCount={pagesCount}
+          showItems={showItems}
+          dispatch={dispatch}
+        />
+      </Filters>
       <button onClick={openModal} className={styles.addBtn}>
         Добавить акцию
       </button>

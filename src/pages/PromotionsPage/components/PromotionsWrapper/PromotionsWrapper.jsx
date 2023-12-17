@@ -158,6 +158,7 @@ const PromotionsWrapper = () => {
           <>
             <PromotionsTop openModal={openModal} />
             <PromotionsTable openModal={openModal} />
+            <PromotionsRemove />
             <Modal shouldShow={showModal} setShowModal={setShowModal}>
               <Form onSubmit={onSubmit} onRemove={onRemove}>
                 <FormInput

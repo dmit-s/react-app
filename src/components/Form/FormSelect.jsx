@@ -1,8 +1,6 @@
 import SvgIcon from "../SvgIcon/SvgIcon";
 import styles from "./FormSelect.module.scss";
 
-import { useEffect, useState } from "react";
-
 const FormSelect = ({
   name,
   activeSelect,
@@ -12,9 +10,8 @@ const FormSelect = ({
   placeholder,
   toggleSelect,
   optionsData,
-  updateFormData
+  updateFormData,
 }) => {
-
   const showList = () => {
     toggleSelect(name);
   };
@@ -24,26 +21,29 @@ const FormSelect = ({
     const value = e.target.dataset.value;
     updateFormData(name, value);
     toggleSelect(name);
-  }
+  };
 
   return (
     <div className={styles.wrapper}>
       <label className={styles.title}>{title}</label>
       <div className={styles.select}>
         <div onClick={showList} className={styles.inputWrapper}>
-          <input
-            disabled
-            type="text"
-            value={value}
-            placeholder={placeholder}
-          />
+          <input disabled type="text" value={value} placeholder={placeholder} />
           <SvgIcon iconName="chevron-down" />
         </div>
         {activeSelect === name && (
           <ul className={styles.selectOptions}>
-            {optionsData && optionsData.map(item => (
-              <li key={item} onClick={handleClick} className={styles.selectOption} data-value={item}>{item}</li>
-            ))}
+            {optionsData &&
+              optionsData.map((item) => (
+                <li
+                  key={item}
+                  onClick={handleClick}
+                  className={styles.selectOption}
+                  data-value={item}
+                >
+                  {item}
+                </li>
+              ))}
           </ul>
         )}
       </div>
