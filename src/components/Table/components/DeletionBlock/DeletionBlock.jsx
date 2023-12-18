@@ -2,19 +2,19 @@ import styles from "./DeletionBlock.module.scss";
 import SvgIcon from "../../../SvgIcon/SvgIcon";
 import { useEffect, useState } from "react";
 
-const DeletionBlock = ({ checkedCount, handleRemove }) => {
+const DeletionBlock = ({ checkedItems, handleRemove }) => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    Boolean(checkedCount) ? setShow(true) : setShow(false);
-  }, [checkedCount]);
+    Boolean(checkedItems.length) ? setShow(true) : setShow(false);
+  }, [checkedItems]);
 
   return (
     <div className={`${styles.wrapper} ${show && styles.show}`}>
       <div className={styles.body}>
-        Количество выбранных позиций: <span>{checkedCount}</span>
+        Количество выбранных позиций: <span>{checkedItems.length}</span>
       </div>
-      <button onClick={handleRemove} className={styles.removeBtn}>
+      <button onClick={() => handleRemove(checkedItems)} className={styles.removeBtn}>
         <SvgIcon iconName="trash" />
         Удалить
       </button>

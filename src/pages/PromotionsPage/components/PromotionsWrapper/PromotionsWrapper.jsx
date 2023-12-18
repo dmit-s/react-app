@@ -1,9 +1,6 @@
 import { useContext, useEffect, useState } from "react";
-import styles from "./PromotionsWrapper.module.scss";
 import PromotionsService from "../../../../services/PromotionsService";
 import { PromotionsContext } from "../../context/PromotionsContext";
-import PromotionsTable from "../PromotionsTable/PromotionsTable";
-import PromotionsRemove from "../PromotionsRemove/PromotionsRemove";
 import PromotionsTop from "../PromotionsTop/PromotionsTop";
 import Modal from "../../../../components/Modal/Modal";
 import FormInput from "../../../../components/Form/FormInput";
@@ -41,6 +38,18 @@ const PromotionsWrapper = () => {
   const [activeSelect, setActiveSelect] = useState("");
   const [dataForSelect, setDataForSelect] = useState([]);
   const [formErrors, setFormErrors] = useState(gerFormErrorsInitialState());
+
+  // table
+  const [formattedData, setFormattedData] = useState([]);
+
+  useEffect(() => {
+    setFormattedData(
+      promotionsData.map((item) => {
+        item.cashback = `${item.cashback}%`;
+        return item;
+      })
+    );
+  }, [promotionsData]);
 
   useEffect(() => {
     PromotionsService.getPromotions()
@@ -152,14 +161,16 @@ const PromotionsWrapper = () => {
     }
   };
 
-  const handleRemove = () => {
-    const filteredArr = promotionsData.filter((el) => !el.checked);
+  const handleRemove = (checkedItems) => {
+    const filteredArr = promotionsData.filter(
+      (item) => checkedItems.indexOf(item.id) === -1
+    );
     dispatch({ type: "SET_PROMOTIONS", payload: filteredArr });
   };
 
   return (
     <>
-      <div className={styles.wrapper}>
+      <div>
         {status === "received" && (
           <>
             <PromotionsTop openModal={openModal} />
@@ -174,7 +185,7 @@ const PromotionsWrapper = () => {
                 goods: "Товары",
                 cashback: "Кешбек",
               }}
-              data={promotionsData}
+              data={formattedData}
               showItems={showItems}
               currentPage={currentPage}
               handleAddItem={openModal}
