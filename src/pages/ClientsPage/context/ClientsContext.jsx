@@ -30,6 +30,12 @@ const reducer = (state, action) => {
         ...state,
         showItems: payload,
       };
+
+    case "SET_CLIENTS":
+      return {
+        ...state,
+        clientsData: payload
+      }
   }
 };
 
