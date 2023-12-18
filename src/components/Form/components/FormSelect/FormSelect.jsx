@@ -1,4 +1,4 @@
-import SvgIcon from "../SvgIcon/SvgIcon";
+import SvgIcon from "../../../SvgIcon/SvgIcon";
 import styles from "./FormSelect.module.scss";
 
 const FormSelect = ({

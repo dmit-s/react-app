@@ -3,10 +3,10 @@ import PromotionsService from "../../../../services/PromotionsService";
 import { PromotionsContext } from "../../context/PromotionsContext";
 import PromotionsTop from "../PromotionsTop/PromotionsTop";
 import Modal from "../../../../components/Modal/Modal";
-import FormInput from "../../../../components/Form/FormInput";
 import Form from "../../../../components/Form/Form";
-import FormSelect from "../../../../components/Form/FormSelect";
 import Table from "../../../../components/Table/Table";
+import FormInput from "../../../../components/Form/components/FormInput/FormInput";
+import FormSelect from "../../../../components/Form/components/FormSelect/FormSelect";
 
 const getFormDataInitialState = () => ({
   id: crypto.randomUUID(),
