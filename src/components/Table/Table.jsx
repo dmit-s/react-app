@@ -46,11 +46,11 @@ const Table = ({
     }
   };
 
-  const handleAllChecked = (isChecked) => {
+  const handleCheckAll = (isChecked) => {
     if (!isChecked) {
-      setCheckedItems(slicedData[currentPage - 1].filter(item => checkedItems.indexOf(item.id) > -1));
+      setCheckedItems(checkedItems.filter(id => !slicedData[currentPage - 1].some(item => item.id === id)));
     } else {
-      setCheckedItems(slicedData[currentPage - 1].map((item) => item.id));
+      setCheckedItems([...checkedItems, ...slicedData[currentPage - 1].map((item) => item.id)]);
     }
   };
 
@@ -59,8 +59,6 @@ const Table = ({
       data.filter((item) => checkedItems.indexOf(item.id) !== -1)
     );
   };
-
-  console.log(checkedItems);
 
   return (
     <div className={styles.wrapper}>
@@ -74,7 +72,7 @@ const Table = ({
                 <th>
                   <input
                     type="checkbox"
-                    onChange={(e) => handleAllChecked(e.target.checked)}
+                    onChange={(e) => handleCheckAll(e.target.checked)}
                     checked={slicedData[currentPage - 1].every(
                       (item) => checkedItems.indexOf(item.id) > -1
                     )}
@@ -89,11 +87,6 @@ const Table = ({
           <tbody>
             {slicedData[currentPage - 1].map((item) => (
               <tr key={item.id}>
-                {console.log(
-                  checkedItems.includes(item.id),
-                  checkedItems,
-                  item.id
-                )}
                 {selectable && (
                   <td>
                     <input

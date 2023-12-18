@@ -45,11 +45,15 @@ const PromotionsWrapper = () => {
   useEffect(() => {
     setFormattedData(
       promotionsData.map((item) => {
-        item.cashback = `${item.cashback}%`;
-        return item;
+        const copyItem = { ...item };
+
+        copyItem.cashback = `${item.cashback}%`;
+
+        return copyItem;
       })
     );
   }, [promotionsData]);
+
 
   useEffect(() => {
     PromotionsService.getPromotions()
