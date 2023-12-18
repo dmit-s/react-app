@@ -182,6 +182,12 @@ const PromotionsWrapper = () => {
             <PromotionsRemove /> */}
             <Table
               adding={true}
+              selectable={true}
+              handleAddItem={openModal}
+              handleRemove={handleRemove}
+              data={formattedData}
+              showItems={showItems}
+              currentPage={currentPage}
               headers={{
                 category: "Категория",
                 subcategory: "Подкатегория",
@@ -189,12 +195,6 @@ const PromotionsWrapper = () => {
                 goods: "Товары",
                 cashback: "Кешбек",
               }}
-              data={formattedData}
-              showItems={showItems}
-              currentPage={currentPage}
-              handleAddItem={openModal}
-              selectable={true}
-              handleRemove={handleRemove}
             />
             <Modal shouldShow={showModal} setShowModal={setShowModal}>
               <Form onSubmit={onSubmit} onRemove={onRemove}>

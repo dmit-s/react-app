@@ -48,9 +48,16 @@ const Table = ({
 
   const handleCheckAll = (isChecked) => {
     if (!isChecked) {
-      setCheckedItems(checkedItems.filter(id => !slicedData[currentPage - 1].some(item => item.id === id)));
+      setCheckedItems(
+        checkedItems.filter(
+          (id) => !slicedData[currentPage - 1].some((item) => item.id === id)
+        )
+      );
     } else {
-      setCheckedItems([...checkedItems, ...slicedData[currentPage - 1].map((item) => item.id)]);
+      setCheckedItems([
+        ...checkedItems,
+        ...slicedData[currentPage - 1].map((item) => item.id),
+      ]);
     }
   };
 
@@ -64,54 +71,56 @@ const Table = ({
     <div className={styles.wrapper}>
       {adding && <AddBtn handleClick={handleAddItem} />}
 
-      {slicedData.length > 0 && (
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              {selectable && (
-                <th>
-                  <input
-                    type="checkbox"
-                    onChange={(e) => handleCheckAll(e.target.checked)}
-                    checked={slicedData[currentPage - 1].every(
-                      (item) => checkedItems.indexOf(item.id) > -1
-                    )}
-                  />
-                </th>
-              )}
-              {Object.keys(headers).map((key) => (
-                <th key={key}>{headers[key]}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {slicedData[currentPage - 1].map((item) => (
-              <tr key={item.id}>
+      <div className={styles.tableContainer}>
+        {slicedData.length > 0 && (
+          <table className={styles.table}>
+            <thead>
+              <tr>
                 {selectable && (
-                  <td>
+                  <th>
                     <input
-                      onClick={(e) => e.stopPropagation()}
-                      onChange={(e) => handleCheck(e, item.id)}
                       type="checkbox"
-                      checked={checkedItems.includes(item.id)}
+                      onChange={(e) => handleCheckAll(e.target.checked)}
+                      checked={slicedData[currentPage - 1].every(
+                        (item) => checkedItems.indexOf(item.id) > -1
+                      )}
                     />
-                  </td>
+                  </th>
                 )}
                 {Object.keys(headers).map((key) => (
-                  <td
-                    key={key}
-                    onClick={(e) =>
-                      handleAddItem ? handleAddItem(e, item.id) : undefined
-                    }
-                  >
-                    {item[key]}
-                  </td>
+                  <th key={key}>{headers[key]}</th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+            </thead>
+            <tbody>
+              {slicedData[currentPage - 1].map((item) => (
+                <tr key={item.id}>
+                  {selectable && (
+                    <td>
+                      <input
+                        onClick={(e) => e.stopPropagation()}
+                        onChange={(e) => handleCheck(e, item.id)}
+                        type="checkbox"
+                        checked={checkedItems.includes(item.id)}
+                      />
+                    </td>
+                  )}
+                  {Object.keys(headers).map((key) => (
+                    <td
+                      key={key}
+                      onClick={(e) =>
+                        handleAddItem ? handleAddItem(e, item.id) : undefined
+                      }
+                    >
+                      {item[key]}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
 
       {selectable && (
         <DeletionBlock
