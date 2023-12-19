@@ -1,0 +1,14 @@
+.wrapper {
+  max-width: 160px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+
+  &:not(:first-child) {
+    padding-right: 6rem;
+  }
+
+  &:last-child {
+    padding: 0;
+  }
+}

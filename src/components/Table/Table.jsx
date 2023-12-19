@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./Table.module.scss";
 import AddBtn from "./components/AddBtn/AddBtn";
 import DeletionBlock from "./components/DeletionBlock/DeletionBlock";
+import TableCell from "./components/TableCell/TableCell";
 
 const sliceData = (data, showItems) => {
   const slicedArr = [];
@@ -26,6 +27,7 @@ const Table = ({
   showItems,
   currentPage,
   handleRemove,
+  nothingFoundMessage,
 }) => {
   const [slicedData, setSlicedData] = useState([]);
   const [checkedItems, setCheckedItems] = useState([]);
@@ -71,56 +73,62 @@ const Table = ({
     <div className={styles.wrapper}>
       {adding && <AddBtn handleClick={handleAddItem} />}
 
-      <div className={styles.tableContainer}>
-        {slicedData.length > 0 && (
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                {selectable && (
-                  <th>
-                    <input
-                      type="checkbox"
-                      onChange={(e) => handleCheckAll(e.target.checked)}
-                      checked={slicedData[currentPage - 1].every(
-                        (item) => checkedItems.indexOf(item.id) > -1
-                      )}
-                    />
-                  </th>
-                )}
-                {Object.keys(headers).map((key) => (
-                  <th key={key}>{headers[key]}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {slicedData[currentPage - 1].map((item) => (
-                <tr key={item.id}>
+      {data.length === 0 ? (
+        <span>Nothing Found</span>
+      ) : (
+        <div className={styles.tableContainer}>
+          {slicedData.length > 0 && (
+            <table className={styles.table}>
+              <thead>
+                <tr>
                   {selectable && (
-                    <td>
+                    <th>
                       <input
-                        onClick={(e) => e.stopPropagation()}
-                        onChange={(e) => handleCheck(e, item.id)}
                         type="checkbox"
-                        checked={checkedItems.includes(item.id)}
+                        onChange={(e) => handleCheckAll(e.target.checked)}
+                        checked={slicedData[currentPage - 1].every(
+                          (item) => checkedItems.indexOf(item.id) > -1
+                        )}
                       />
-                    </td>
+                    </th>
                   )}
                   {Object.keys(headers).map((key) => (
-                    <td
-                      key={key}
-                      onClick={(e) =>
-                        handleAddItem ? handleAddItem(e, item.id) : undefined
-                      }
-                    >
-                      {item[key]}
-                    </td>
+                    <th key={key}>{headers[key]}</th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+              </thead>
+              <tbody>
+                {slicedData[currentPage - 1].map(({ id, data }) => (
+                  <tr
+                    key={id}
+                    onClick={(e) =>
+                      handleAddItem ? handleAddItem(e, id) : undefined
+                    }
+                  >
+                    {selectable && (
+                      <td>
+                        <input
+                          onClick={(e) => e.stopPropagation()}
+                          onChange={(e) => handleCheck(e, id)}
+                          type="checkbox"
+                          checked={checkedItems.includes(id)}
+                        />
+                      </td>
+                    )}
+                    {Object.keys(headers).map((key) => (
+                      <TableCell
+                        key={key}
+                        content={data[key].content}
+                        editable={data[key]?.options?.editable}
+                      />
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      )}
 
       {selectable && (
         <DeletionBlock
