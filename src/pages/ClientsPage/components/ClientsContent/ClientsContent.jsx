@@ -22,25 +22,7 @@ const ClientsContent = () => {
   }, []);
 
   useEffect(() => {
-    setTableData(
-      // clientsData.map((item) => {
-      //   const obj = {
-      //     id: item.id,
-      //     data: {},
-      //   };
-
-      //   for (let key in item) {
-      //     if (key === "id") continue;
-
-      //     obj.data[key] = {
-      //       content: item[key],
-          
-      //     };
-      //   }
-      //   return obj;
-      // })
-      formatToTableData(clientsData, ['id'])
-    );
+    setTableData(formatToTableData(clientsData, ["id"]));
   }, [clientsData]);
 
   const handleChange = (value) => {

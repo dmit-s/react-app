@@ -11,7 +11,7 @@ class CategoriesService {
   async getCategories() {
     return [
       {
-        id: crypto.randomUUID(),
+        id: 123,
         name: "Биостимулирующий дневной крем",
         subcategories: [
           {
@@ -27,6 +27,11 @@ class CategoriesService {
             name: "Lorem ipsum dolor sit amet consectetur adipisicing",
           },
         ],
+      },
+      {
+        id: crypto.randomUUID(),
+        name: "Биостимулирующий дневной крем",
+        subcategories: [],
       },
       {
         id: crypto.randomUUID(),
@@ -49,38 +54,7 @@ class CategoriesService {
       {
         id: crypto.randomUUID(),
         name: "Биостимулирующий дневной крем",
-        subcategories: [
-          {
-            id: crypto.randomUUID(),
-            name: "Lorem ipsum dolor sit amet consectetur adipisicing",
-          },
-          {
-            id: crypto.randomUUID(),
-            name: "Lorem ipsum dolor sit amet consectetur adipisicing",
-          },
-          {
-            id: crypto.randomUUID(),
-            name: "Lorem ipsum dolor sit amet consectetur adipisicing",
-          },
-        ],
-      },
-      {
-        id: crypto.randomUUID(),
-        name: "Биостимулирующий дневной крем",
-        subcategories: [
-          {
-            id: crypto.randomUUID(),
-            name: "Lorem ipsum dolor sit amet consectetur adipisicing",
-          },
-          {
-            id: crypto.randomUUID(),
-            name: "Lorem ipsum dolor sit amet consectetur adipisicing",
-          },
-          {
-            id: crypto.randomUUID(),
-            name: "Lorem ipsum dolor sit amet consectetur adipisicing",
-          },
-        ],
+        subcategories: [],
       },
     ];
   }

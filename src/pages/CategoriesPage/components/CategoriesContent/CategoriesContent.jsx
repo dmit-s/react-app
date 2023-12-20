@@ -8,35 +8,37 @@ import { formatToTableData } from "../../../../helpers/formatToTableData";
 
 const CategoriesContent = () => {
   const {
-    state: { categoriesData, subcategoriesData },
+    state: { categoriesData },
     dispatch,
   } = useContext(CategoriesContext);
-  const [tableData, setTableData] = useState([]);
+  const [categoriesTableData, setCategoriesTableData] = useState([]);
+  const [subcategoriesTableData, setSubcategoriesTableData] = useState([]);
+  const [activeCategory, setActiveCategory] = useState('');
 
   useEffect(() => {
-    // setTableData(
-    //   categoriesData.map((item) => {
-    //     const obj = {
-    //       id: item.id,
-    //       data: {},
-    //     };
-
-    //     for (let key in item) {
-    //       if (key === "id" || key === "subcategories") continue;
-  
-
-    //       obj.data[key] = {
-    //         content: item[key],
-    //         options: {editable: true, removable: true}
-    //       };
-    //     }
-    //     console.log(obj);
-    //     return obj;
-    //   })
-    // );
-    setTableData(formatToTableData(categoriesData, ["id", "subcategories"], {removable: true, editable: true}))
+    setCategoriesTableData(
+      formatToTableData(categoriesData, ["id", "subcategories"], {
+        removable: true,
+        editable: true,
+      })
+    );
   }, [categoriesData]);
 
+  useEffect(() => {
+    const findCategory = categoriesData.find(
+      (item) => item.id === activeCategory
+    );
+
+
+    if (findCategory) {
+      setSubcategoriesTableData(
+        formatToTableData(findCategory.subcategories , ["id"], {
+          removable: true,
+          editable: true,
+        })
+      );
+    }
+  }, [activeCategory, categoriesData]);
 
   useEffect(() => {
     CategoriesService.getCategories().then((data) =>
@@ -44,11 +46,22 @@ const CategoriesContent = () => {
     );
   }, []);
 
+  const handleClick = (e, id) => {
+    setActiveCategory(id);
+  }
+
   return (
     <div className={styles.wrapper}>
-      <Table data={tableData} headers={{name: 'Название категории'}}/>
+      <Table
+        data={categoriesTableData}
+        headers={{ name: "Название категории" }}
+        handleAddItem={handleClick}
+      />
       <SvgIcon iconName="two-chevron-right" />
-      {/* <Table data={subcategoriesData} headers={{name: 'Название подкатегории'}}/> */}
+      <Table
+        data={subcategoriesTableData}
+        headers={{ name: "Название подкатегории" }}
+      />
     </div>
   );
 };
