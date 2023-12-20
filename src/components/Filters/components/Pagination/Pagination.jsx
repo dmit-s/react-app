@@ -1,19 +1,14 @@
-import { useContext, useEffect } from "react";
-import SvgIcon from "../SvgIcon/SvgIcon";
+
+import { useEffect } from "react";
 import styles from "./Pagination.module.scss";
-import { PromotionsContext } from "../../pages/PromotionsPage/context/PromotionsContext";
+import SvgIcon from "../../../SvgIcon/SvgIcon";
 
 const getPagesCount = (data, showItems) => {
   const res = Math.ceil(data.length / showItems);
   return res > 0 ? res : 1;
 };
 
-const Pagination = ({ data }) => {
-  const {
-    state: { currentPage, pagesCount, showItems },
-    dispatch,
-  } = useContext(PromotionsContext);
-
+const Pagination = ({ data, currentPage, pagesCount, showItems, dispatch }) => {
   useEffect(() => {
     dispatch({
       type: "SET_PAGES_COUNT",

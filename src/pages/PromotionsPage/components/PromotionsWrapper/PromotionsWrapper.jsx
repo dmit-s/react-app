@@ -1,14 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import styles from "./PromotionsWrapper.module.scss";
 import PromotionsService from "../../../../services/PromotionsService";
 import { PromotionsContext } from "../../context/PromotionsContext";
-import PromotionsTable from "../PromotionsTable/PromotionsTable";
-import PromotionsRemove from "../PromotionsRemove/PromotionsRemove";
 import PromotionsTop from "../PromotionsTop/PromotionsTop";
 import Modal from "../../../../components/Modal/Modal";
-import FormInput from "../../../../components/Form/FormInput";
 import Form from "../../../../components/Form/Form";
-import FormSelect from "../../../../components/Form/FormSelect";
+import Table from "../../../../components/Table/Table";
+import FormInput from "../../../../components/Form/components/FormInput/FormInput";
+import FormSelect from "../../../../components/Form/components/FormSelect/FormSelect";
 
 const getFormDataInitialState = () => ({
   id: crypto.randomUUID(),
@@ -29,7 +27,7 @@ const gerFormErrorsInitialState = () => ({
 
 const PromotionsWrapper = () => {
   const {
-    state: { promotionsData, status },
+    state: { promotionsData, status, showItems, currentPage },
     dispatch,
   } = useContext(PromotionsContext);
 
@@ -40,6 +38,30 @@ const PromotionsWrapper = () => {
   const [activeSelect, setActiveSelect] = useState("");
   const [dataForSelect, setDataForSelect] = useState([]);
   const [formErrors, setFormErrors] = useState(gerFormErrorsInitialState());
+
+  // table
+  const [formattedData, setFormattedData] = useState([]);
+
+  useEffect(() => {
+    setFormattedData(
+      promotionsData.map((item) => {
+        const obj = {
+          id: item.id,
+          data: {},
+        };
+
+        for (let key in item) {
+          if (key === "id") continue;
+          obj.data[key] = {
+            content: `${key === "cashback" ? `${item[key]}%` : `${item[key]}`}`,
+            options: { editable: false },
+          };
+        }
+
+        return obj;
+      })
+    );
+  }, [promotionsData]);
 
   useEffect(() => {
     PromotionsService.getPromotions()
@@ -151,14 +173,35 @@ const PromotionsWrapper = () => {
     }
   };
 
+  const handleRemove = (checkedItems) => {
+    const filteredArr = promotionsData.filter(
+      (item) => checkedItems.indexOf(item.id) === -1
+    );
+    dispatch({ type: "SET_PROMOTIONS", payload: filteredArr });
+  };
+
   return (
     <>
-      <div className={styles.wrapper}>
+      <div>
         {status === "received" && (
           <>
             <PromotionsTop openModal={openModal} />
-            <PromotionsTable openModal={openModal} />
-            <PromotionsRemove />
+            <Table
+              adding={true}
+              selectable={true}
+              handleAddItem={openModal}
+              handleRemove={handleRemove}
+              data={formattedData}
+              showItems={showItems}
+              currentPage={currentPage}
+              headers={{
+                category: "Категория",
+                subcategory: "Подкатегория",
+                brand: "Бренд",
+                goods: "Товары",
+                cashback: "Кешбек",
+              }}
+            />
             <Modal shouldShow={showModal} setShowModal={setShowModal}>
               <Form onSubmit={onSubmit} onRemove={onRemove}>
                 <FormInput

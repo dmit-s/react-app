@@ -1,8 +1,6 @@
-import { useContext, useEffect, useState } from "react";
-import SvgIcon from "../SvgIcon/SvgIcon";
-import styles from "./ShowFIlter.module.scss";
-import { PromotionsContext } from "../../pages/PromotionsPage/context/PromotionsContext";
-import Select from "../Select/Select";
+import { useEffect, useState } from "react";
+import styles from "./ShowFilter.module.scss";
+import SvgIcon from "../../../SvgIcon/SvgIcon";
 
 const getNumsArr = (data) => {
   const arr = [];
@@ -19,12 +17,7 @@ const getNumsArr = (data) => {
   return arr;
 };
 
-const ShowFilter = ({ data }) => {
-  const {
-    state: { showItems },
-    dispatch,
-  } = useContext(PromotionsContext);
-
+const ShowFilter = ({ data, showItems, dispatch }) => {
   const [numsArr, setNumsArr] = useState([10]);
   const [active, setActive] = useState(false);
 

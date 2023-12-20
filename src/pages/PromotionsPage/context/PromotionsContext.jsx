@@ -81,18 +81,22 @@ const reducer = (state, action) => {
     case "UPDATE_PROMOTION":
       return {
         ...state,
-        promotionsData: state.promotionsData.map(item => item.id === payload.id ? payload : item)
-      }
+        promotionsData: state.promotionsData.map((item) =>
+          item.id === payload.id ? payload : item
+        ),
+      };
     case "ADD_PROMOTION":
       return {
         ...state,
-        promotionsData: [payload, ...state.promotionsData]
-      }
+        promotionsData: [payload, ...state.promotionsData],
+      };
     case "REMOVE_PROMOTION":
       return {
         ...state,
-        promotionsData: state.promotionsData.filter(item => item.id !== payload)
-      }
+        promotionsData: state.promotionsData.filter(
+          (item) => item.id !== payload
+        ),
+      };
   }
 };
 

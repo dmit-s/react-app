@@ -1,48 +1,48 @@
 .wrapper {
 
-  color: #37393d;
-
-  .buttonsWrapper {
-    padding: 2.6rem 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-
-    &::after {
-      content: "";
-      display: block;
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      width: calc(100% + 8rem);
-      transform: translateX(-50%);
-      height: 1px;
-      background-color: #d0d3da;
-    }
-
-    button {
-      height: 4.8rem;
-      flex: 1 1 auto;
-      border-radius: 4px;
-      font-weight: 500;
-
-      &:not(:last-child) {
-        margin-right: 1.6rem;
+    color: #37393d;
+  
+    .buttonsWrapper {
+      padding: 2.6rem 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+  
+      &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: calc(100% + 8rem);
+        transform: translateX(-50%);
+        height: 1px;
+        background-color: #d0d3da;
+      }
+  
+      button {
+        height: 4.8rem;
+        flex: 1 1 auto;
+        border-radius: 4px;
+        font-weight: 500;
+  
+        &:not(:last-child) {
+          margin-right: 1.6rem;
+        }
+      }
+  
+      .removeBtn {
+        border: 1px solid #d0d3da;
+      }
+  
+      .submitBtn {
+        background-color: #bd68ca;
+        color: #fff;
       }
     }
-
-    .removeBtn {
-      border: 1px solid #d0d3da;
-    }
-
-    .submitBtn {
-      background-color: #bd68ca;
-      color: #fff;
+  
+    .content {
+      padding: 2.6rem 0;
     }
   }
-
-  .content {
-    padding: 2.6rem 0;
-  }
-}

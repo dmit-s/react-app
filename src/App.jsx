@@ -3,10 +3,6 @@ import Layout from "./components/Layout/Layout";
 
 // pages
 import PromotionsPage from "./pages/PromotionsPage/PromotionsPage";
-import ClientsPage from "./pages/ClientsPage/ClientsPage";
-import ProductsPage from "./pages/ProductsPage/ProductsPage";
-
-// pages
 
 
 function App() {
@@ -14,8 +10,6 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout/>}>
         <Route index element={<PromotionsPage/>}/>
-        <Route path="clients" element={<ClientsPage/>}/>
-        <Route path="products" element={<ProductsPage/>}/>
       </Route>
     </Routes>
   );
