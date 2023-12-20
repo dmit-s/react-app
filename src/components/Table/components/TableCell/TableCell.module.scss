@@ -11,4 +11,24 @@
   &:last-child {
     padding: 0;
   }
+
+  .flexContainer {
+    display: flex;
+    .content {
+      width: 100%;
+      font-size: 1.4rem;
+      color: #434652;
+      border: none;
+      padding: 0;
+      outline: none;
+    }
+    .buttonsContainer {
+      button:not(:last-child){
+        margin-right: 2.5rem;
+      }
+      button svg {
+        width: 2rem;
+      }
+    }
+  }
 }

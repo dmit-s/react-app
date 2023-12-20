@@ -3,6 +3,7 @@ import ClientsTop from "../ClientsTop/ClientsTop";
 import { ClientsContext } from "../../context/ClientsContext";
 import Table from "../../../../components/Table/Table";
 import UserService from "../../../../services/ClientsService";
+import { formatToTableData } from "../../../../helpers/formatToTableData";
 
 const ClientsContent = () => {
   const {
@@ -22,21 +23,23 @@ const ClientsContent = () => {
 
   useEffect(() => {
     setTableData(
-      clientsData.map((item) => {
-        const obj = {
-          id: item.id,
-          data: {},
-        };
+      // clientsData.map((item) => {
+      //   const obj = {
+      //     id: item.id,
+      //     data: {},
+      //   };
 
-        for (let key in item) {
-          if (key === "id") continue;
+      //   for (let key in item) {
+      //     if (key === "id") continue;
 
-          obj.data[key] = {
-            content: item[key],
-          };
-        }
-        return obj;
-      })
+      //     obj.data[key] = {
+      //       content: item[key],
+          
+      //     };
+      //   }
+      //   return obj;
+      // })
+      formatToTableData(clientsData, ['id'])
     );
   }, [clientsData]);
 

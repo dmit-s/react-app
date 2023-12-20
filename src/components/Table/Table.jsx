@@ -27,13 +27,16 @@ const Table = ({
   showItems,
   currentPage,
   handleRemove,
-  nothingFoundMessage,
+  nothingFoundMessage = "Nothing Found",
+  filters,
 }) => {
   const [slicedData, setSlicedData] = useState([]);
   const [checkedItems, setCheckedItems] = useState([]);
 
   useEffect(() => {
-    setSlicedData(sliceData(data, showItems));
+    if (filters) {
+      setSlicedData(sliceData(data, showItems));
+    }
   }, [data, showItems]);
 
   useEffect(() => {
@@ -73,11 +76,11 @@ const Table = ({
     <div className={styles.wrapper}>
       {adding && <AddBtn handleClick={handleAddItem} />}
 
-      {data.length === 0 ? (
-        <span>Nothing Found</span>
+      {(filters ? slicedData.length : data.length) === 0 ? (
+        <span>{nothingFoundMessage}</span>
       ) : (
         <div className={styles.tableContainer}>
-          {slicedData.length > 0 && (
+          {data.length > 0 && (
             <table className={styles.table}>
               <thead>
                 <tr>
@@ -98,32 +101,35 @@ const Table = ({
                 </tr>
               </thead>
               <tbody>
-                {slicedData[currentPage - 1].map(({ id, data }) => (
-                  <tr
-                    key={id}
-                    onClick={(e) =>
-                      handleAddItem ? handleAddItem(e, id) : undefined
-                    }
-                  >
-                    {selectable && (
-                      <td>
-                        <input
-                          onClick={(e) => e.stopPropagation()}
-                          onChange={(e) => handleCheck(e, id)}
-                          type="checkbox"
-                          checked={checkedItems.includes(id)}
+                {(filters ? slicedData[currentPage - 1] : data).map(
+                  ({ id, data }) => (
+                    <tr
+                      key={id}
+                      onClick={(e) =>
+                        handleAddItem ? handleAddItem(e, id) : undefined
+                      }
+                    >
+                      {selectable && (
+                        <td>
+                          <input
+                            onClick={(e) => e.stopPropagation()}
+                            onChange={(e) => handleCheck(e, id)}
+                            type="checkbox"
+                            checked={checkedItems.includes(id)}
+                          />
+                        </td>
+                      )}
+                      {Object.keys(headers).map((key) => (
+                        <TableCell
+                          key={key}
+                          content={data[key].content}
+                          removable={data[key]?.options?.removable}
+                          editable={data[key]?.options?.editable}
                         />
-                      </td>
-                    )}
-                    {Object.keys(headers).map((key) => (
-                      <TableCell
-                        key={key}
-                        content={data[key].content}
-                        editable={data[key]?.options?.editable}
-                      />
-                    ))}
-                  </tr>
-                ))}
+                      ))}
+                    </tr>
+                  )
+                )}
               </tbody>
             </table>
           )}

@@ -7,6 +7,7 @@ import Form from "../../../../components/Form/Form";
 import Table from "../../../../components/Table/Table";
 import FormInput from "../../../../components/Form/components/FormInput/FormInput";
 import FormSelect from "../../../../components/Form/components/FormSelect/FormSelect";
+import { formatToTableData } from "../../../../helpers/formatToTableData";
 
 const getFormDataInitialState = () => ({
   id: crypto.randomUUID(),
@@ -40,29 +41,21 @@ const PromotionsWrapper = () => {
   const [formErrors, setFormErrors] = useState(gerFormErrorsInitialState());
 
   // table
-  const [formattedData, setFormattedData] = useState([]);
+  const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
-    setFormattedData(
-      promotionsData.map((item) => {
-        const obj = {
-          id: item.id,
-          data: {},
-        };
-
-        for (let key in item) {
-          if (key === "id") continue;
-          obj.data[key] = {
-            content: `${key === "cashback" ? `${item[key]}%` : `${item[key]}`}`,
-            options: { editable: false },
-          };
-        }
-        console.log(obj);
+    setTableData(() => {
+      const formattedData = promotionsData.map((item) => {
+        const obj = { ...item };
+        obj.cashback = `${obj.cashback}%`;
         return obj;
-      })
+      });
+
+      return formatToTableData(formattedData, ["id"]);
+    }
     );
   }, [promotionsData]);
-  console.log(formattedData);
+
   useEffect(() => {
     PromotionsService.getPromotions()
       .then((data) => {
@@ -191,9 +184,10 @@ const PromotionsWrapper = () => {
               selectable={true}
               handleAddItem={openModal}
               handleRemove={handleRemove}
-              data={formattedData}
+              data={tableData}
               showItems={showItems}
               currentPage={currentPage}
+              filters={true}
               headers={{
                 category: "Категория",
                 subcategory: "Подкатегория",
