@@ -45,15 +45,23 @@ const PromotionsWrapper = () => {
   useEffect(() => {
     setFormattedData(
       promotionsData.map((item) => {
-        const copyItem = { ...item };
+        const obj = {
+          id: item.id,
+          data: {},
+        };
 
-        copyItem.cashback = `${item.cashback}%`;
+        for (let key in item) {
+          if (key === "id") continue;
+          obj.data[key] = {
+            content: `${key === "cashback" ? `${item[key]}%` : `${item[key]}`}`,
+            options: { editable: false },
+          };
+        }
 
-        return copyItem;
+        return obj;
       })
     );
   }, [promotionsData]);
-
 
   useEffect(() => {
     PromotionsService.getPromotions()
@@ -178,8 +186,6 @@ const PromotionsWrapper = () => {
         {status === "received" && (
           <>
             <PromotionsTop openModal={openModal} />
-            {/* <PromotionsTable openModal={openModal} />
-            <PromotionsRemove /> */}
             <Table
               adding={true}
               selectable={true}

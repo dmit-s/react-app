@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import styles from "./PromotionsTop.module.scss";
 import { PromotionsContext } from "../../context/PromotionsContext";
-import ShowFilter from "../../../../components/Filters/Filters/components/ShowFilter/ShowFilter";
-import Pagination from "../../../../components/Filters/Filters/components/Pagination/Pagination";
-import Filters from "../../../../components/Filters/Filters/Filters";
+import Filters from "../../../../components/Filters/Filters";
+import ShowFilter from "../../../../components/Filters/components/ShowFilter/ShowFilter";
+import Pagination from "../../../../components/Filters/components/Pagination/Pagination";
 
 const PromotionsTop = ({ openModal }) => {
   const {
@@ -27,9 +27,6 @@ const PromotionsTop = ({ openModal }) => {
           dispatch={dispatch}
         />
       </Filters>
-      {/* <button onClick={openModal} className={styles.addBtn}>
-        Добавить акцию
-      </button> */}
     </div>
   );
 };

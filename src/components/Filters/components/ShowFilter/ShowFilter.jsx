@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import SvgIcon from '../../../../SvgIcon/SvgIcon'
 import styles from "./ShowFIlter.module.scss";
+import SvgIcon from "../../../SvgIcon/SvgIcon";
 
 const getNumsArr = (data) => {
   const arr = [];

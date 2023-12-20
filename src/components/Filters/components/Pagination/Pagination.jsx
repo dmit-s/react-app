@@ -1,6 +1,7 @@
-import SvgIcon from "../../../../SvgIcon/SvgIcon";
+
 import { useEffect } from "react";
 import styles from "./Pagination.module.scss";
+import SvgIcon from "../../../SvgIcon/SvgIcon";
 
 const getPagesCount = (data, showItems) => {
   const res = Math.ceil(data.length / showItems);
