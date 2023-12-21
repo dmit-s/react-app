@@ -48,7 +48,11 @@ const reducer = (state, action) => {
     case "ADD_SUBCATEGORY":
       return {
         ...state,
-        subcategoriesData: [...state.subcategoriesData, payload],
+        categoriesData: state.categoriesData.map((item) =>
+          item.id === payload.id
+            ? { ...item, subcategories: [...item.subcategories, payload.item] }
+            : item
+        ),
       };
   }
 };

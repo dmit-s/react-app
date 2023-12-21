@@ -63,9 +63,32 @@ const CategoriesContent = () => {
     dispatch({ type: "ADD_CATEGORY", payload: item });
   };
 
+  const addSubcategory = (categoryId, item) => {
+    dispatch({ type: "ADD_SUBCATEGORY", payload: { categoryId, item } });
+  };
+
   const editCategory = (id, value) => {
     const category = categoriesData.find((item) => item.id === id);
     const updatedCategory = { ...category, name: value };
+
+    dispatch({ type: "UPDATE_CATEGORY", payload: updatedCategory });
+  };
+
+  console.log(categoriesData);
+
+  const editSubcategory = (id, value) => {
+    const updatedCategory = categoriesData.map((categoryItem) => {
+      if (categoryItem.id === activeCategory) {
+        categoryItem.subcategories = categoryItem.subcategories.map(
+          (subcategoryItem) =>
+            subcategoryItem.id === id
+              ? { ...subcategoryItem, name: value }
+              : subcategoryItem
+        );
+      }
+
+      return categoryItem;
+    });
     dispatch({ type: "UPDATE_CATEGORY", payload: updatedCategory });
   };
 
@@ -78,14 +101,13 @@ const CategoriesContent = () => {
     });
   };
 
-  const onSubmitSubcategory = () => {
+  const onSubmitSubcategory = (e) => {
     e.preventDefault();
-    addCategory({
+    addSubcategory(activeCategory, {
       id: crypto.randomUUID(),
-      name: categoryInputValue,
-      subcategories: [],
+      name: subcategoryInputValue,
     });
-  }
+  };
 
   const updateCategoryFormData = (_, value) => {
     setCategoryInputValue(value);
@@ -97,7 +119,7 @@ const CategoriesContent = () => {
 
   return (
     <div className={styles.wrapper}>
-      <Form onSubmit={onSubmit}>
+      <Form onSubmit={onSubmitCategory}>
         <FormInput
           updateFormData={updateCategoryFormData}
           placeholder="Введите название категории"
@@ -116,9 +138,8 @@ const CategoriesContent = () => {
           adding
         />
       </Form>
-
       <SvgIcon iconName="two-chevron-right" />
-      <Form>
+      <Form onSubmit={onSubmitSubcategory}>
         <FormInput
           updateFormData={updateSubcategoryFormData}
           placeholder="Введите название подкатегории"
@@ -134,6 +155,7 @@ const CategoriesContent = () => {
               ? "Здесь пока нет подкатегорий"
               : "Выберите категорию"
           }
+          editItem={editSubcategory}
         />
       </Form>
     </div>

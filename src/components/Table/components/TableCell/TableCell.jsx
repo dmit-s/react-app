@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SvgIcon from "../../../SvgIcon/SvgIcon";
 import styles from "./TableCell.module.scss";
 import useOutsideClick from "../../../../hooks/useOutsideClick";
@@ -15,6 +15,13 @@ const TableCell = ({
 }) => {
   const [isEditting, setEdding] = useState(false);
   const [value, setValue] = useState(content);
+  const inputRef = useRef();
+
+  useEffect(() => {
+    if (isEditting) {
+      inputRef.current.focus();
+    }
+  }, [isEditting]);
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -36,9 +43,12 @@ const TableCell = ({
   const handleClick = (e) => {
     e.preventDefault();
     toggleActive(id);
-  }
+  };
 
-  const ref = editable && useOutsideClick(() => setEdding(false));
+  const handleBlur = () => {
+    setEdding(false);
+    editFunc(id, value);
+  };
 
   return (
     <td
@@ -46,13 +56,15 @@ const TableCell = ({
       style={{ cursor: `${editable && "pointer"}` }}
       className={`${styles.wrapper} ${activeId === id && styles.active}`}
     >
-      <div ref={ref} className={styles.flexContainer}>
+      <div className={styles.flexContainer}>
         <input
+          ref={inputRef}
           className={styles.content}
           type="text"
           value={value || "-"}
           disabled={!isEditting}
           onChange={handleChange}
+          onBlur={editable && handleBlur}
         />
 
         <div className={styles.buttonsContainer}>
