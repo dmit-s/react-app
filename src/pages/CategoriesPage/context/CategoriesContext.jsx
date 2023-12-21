@@ -26,7 +26,7 @@ const reducer = (state, action) => {
     case "REMOVE_CATEGORY":
       return {
         ...state,
-        categoriesData: state.categoriesData.filter((c) => c !== payload),
+        categoriesData: state.categoriesData.filter((c) => c.id !== payload),
       };
     case "REMOVE_SUBCATEGORY":
       return {
@@ -37,6 +37,13 @@ const reducer = (state, action) => {
       return {
         ...state,
         categoriesData: [...state.categoriesData, payload],
+      };
+    case "UPDATE_CATEGORY":
+      return {
+        ...state,
+        categoriesData: state.categoriesData.map((item) =>
+          item.id === payload.id ? payload : item
+        ),
       };
     case "ADD_SUBCATEGORY":
       return {

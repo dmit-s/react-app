@@ -5,6 +5,8 @@ import { useContext, useEffect, useState } from "react";
 import { CategoriesContext } from "../../context/CategoriesContext";
 import CategoriesService from "../../../../services/CategoriesService";
 import { formatToTableData } from "../../../../helpers/formatToTableData";
+import Form from "../../../../components/Form/Form";
+import FormInput from "../../../../components/Form/components/FormInput/FormInput";
 
 const CategoriesContent = () => {
   const {
@@ -13,7 +15,9 @@ const CategoriesContent = () => {
   } = useContext(CategoriesContext);
   const [categoriesTableData, setCategoriesTableData] = useState([]);
   const [subcategoriesTableData, setSubcategoriesTableData] = useState([]);
-  const [activeCategory, setActiveCategory] = useState('');
+  const [activeCategory, setActiveCategory] = useState("");
+  const [categoryInputValue, setCategoryInputValue] = useState("");
+  const [subcategoryInputValue, setSubcategoryInputValue] = useState("");
 
   useEffect(() => {
     setCategoriesTableData(
@@ -29,14 +33,15 @@ const CategoriesContent = () => {
       (item) => item.id === activeCategory
     );
 
-
     if (findCategory) {
       setSubcategoriesTableData(
-        formatToTableData(findCategory.subcategories , ["id"], {
+        formatToTableData(findCategory.subcategories, ["id"], {
           removable: true,
           editable: true,
         })
       );
+    } else {
+      setSubcategoriesTableData([]);
     }
   }, [activeCategory, categoriesData]);
 
@@ -48,20 +53,77 @@ const CategoriesContent = () => {
 
   const handleClick = (e, id) => {
     setActiveCategory(id);
-  }
+  };
+
+  const removeCategory = (id) => {
+    dispatch({ type: "REMOVE_CATEGORY", payload: id });
+  };
+
+  const addCategory = (item) => {
+    dispatch({ type: "ADD_CATEGORY", payload: item });
+  };
+
+  const editCategory = (id, value) => {
+    const category = categoriesData.find((item) => item.id === id);
+    const updatedCategory = { ...category, name: value };
+    dispatch({ type: "UPDATE_CATEGORY", payload: updatedCategory });
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    addCategory({
+      id: crypto.randomUUID(),
+      name: categoryInputValue,
+      subcategories: [],
+    });
+  };
+
+  const updateCategoryFormData = (_, value) => {
+    setCategoryInputValue(value);
+  };
+
 
   return (
     <div className={styles.wrapper}>
-      <Table
-        data={categoriesTableData}
-        headers={{ name: "Название категории" }}
-        handleAddItem={handleClick}
-      />
+      <Form onSubmit={onSubmit}>
+        <FormInput
+          updateFormData={updateCategoryFormData}
+          placeholder="Введите название категории"
+          name="category"
+          value={categoryInputValue}
+        />
+        <button className="purple-btn">Добавить категорию</button>
+
+        <Table
+          data={categoriesTableData}
+          headers={{ name: "Название категории" }}
+          handleAddItem={handleClick}
+          handleRemove={removeCategory}
+          editItem={editCategory}
+          nothingFoundMessage="Здесь пока нет категорий"
+          adding
+        />
+      </Form>
+
       <SvgIcon iconName="two-chevron-right" />
-      <Table
-        data={subcategoriesTableData}
-        headers={{ name: "Название подкатегории" }}
-      />
+      <Form>
+      <FormInput
+          updateFormData={updateFormData}
+          placeholder="Введите название подкатегории"
+          value={subcategoryInputValue}
+        />
+        <button className="purple-btn">Добавить подкатегорию</button>
+
+        <Table
+          data={subcategoriesTableData}
+          headers={{ name: "Название подкатегории" }}
+          nothingFoundMessage={
+            categoriesTableData.length
+              ? "Здесь пока нет подкатегорий"
+              : "Выберите категорию"
+          }
+        />
+      </Form>
     </div>
   );
 };

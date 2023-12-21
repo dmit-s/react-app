@@ -24,6 +24,7 @@ const FormInput = ({
         type={inputType}
         value={value}
         placeholder={placeholder}
+        name={name}
       />
       <small className={styles.error}>{error}</small>
     </div>

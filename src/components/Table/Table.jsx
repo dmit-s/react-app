@@ -29,9 +29,12 @@ const Table = ({
   handleRemove,
   nothingFoundMessage = "Nothing Found",
   filters,
+  editItem,
+
 }) => {
   const [slicedData, setSlicedData] = useState([]);
   const [checkedItems, setCheckedItems] = useState([]);
+  const [activeTableCell, setActiveTableCell] = useState('');
 
   useEffect(() => {
     if (filters) {
@@ -72,9 +75,13 @@ const Table = ({
     );
   };
 
+  const toggleActive = (id) => {
+    setActiveTableCell(id);
+  }
+
   return (
     <div className={styles.wrapper}>
-      {adding && <AddBtn handleClick={handleAddItem} />}
+      {/* {adding && <AddBtn handleClick={handleAddItem} />} */}
 
       {(filters ? slicedData.length : data.length) === 0 ? (
         <span>{nothingFoundMessage}</span>
@@ -122,9 +129,14 @@ const Table = ({
                       {Object.keys(headers).map((key) => (
                         <TableCell
                           key={key}
+                          id={id}
                           content={data[key].content}
                           removable={data[key]?.options?.removable}
                           editable={data[key]?.options?.editable}
+                          editFunc={editItem}
+                          removeFunc={handleRemove}
+                          toggleActive={toggleActive}
+                          activeId={activeTableCell}
                         />
                       ))}
                     </tr>

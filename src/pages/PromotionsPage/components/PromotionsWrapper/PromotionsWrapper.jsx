@@ -52,8 +52,7 @@ const PromotionsWrapper = () => {
       });
 
       return formatToTableData(formattedData, ["id"]);
-    }
-    );
+    });
   }, [promotionsData]);
 
   useEffect(() => {
@@ -173,6 +172,27 @@ const PromotionsWrapper = () => {
     dispatch({ type: "SET_PROMOTIONS", payload: filteredArr });
   };
 
+  const getFormButtons = () => {
+    const buttonsData = [
+      {
+        className: "outline-btn",
+        text: "Удалить",
+        onRemove,
+      },
+      {
+        className: "purple-btn",
+        text: "Сохранить",
+        onSubmit,
+      },
+    ];
+
+    return buttonsData.map(({ text, className, handleClick }) => (
+      <button onClick={handleClick} className={className}>
+        {text}
+      </button>
+    ));
+  };
+
   return (
     <>
       <div>
@@ -197,7 +217,11 @@ const PromotionsWrapper = () => {
               }}
             />
             <Modal shouldShow={showModal} setShowModal={setShowModal}>
-              <Form onSubmit={onSubmit} onRemove={onRemove}>
+              <Form
+                onSubmit={onSubmit}
+                onRemove={onRemove}
+                buttons={getFormButtons()}
+              >
                 <FormInput
                   title="Начисление кешбека с покупки"
                   name="cashback"

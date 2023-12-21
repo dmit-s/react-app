@@ -1,14 +1,14 @@
-import styles from './Form.module.scss'
+import styles from "./Form.module.scss";
 
-const Form = ({children, onSubmit, onRemove}) => {
+const Form = ({ children, onSubmit, buttons }) => {
   return (
     <form onSubmit={onSubmit} className={styles.wrapper}>
-      <div className={styles.buttonsWrapper}>
-        <button onClick={onRemove} className={styles.removeBtn} type="button">
-          Удалить
-        </button>
-        <button className={styles.submitBtn}>Сохранить</button>
-      </div>
+      {buttons && (
+        <div className={styles.buttonsWrapper}>
+          {buttons}
+        </div>
+      )}
+
       <div className={styles.content}>{children}</div>
     </form>
   );
