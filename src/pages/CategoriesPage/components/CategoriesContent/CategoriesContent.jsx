@@ -69,7 +69,7 @@ const CategoriesContent = () => {
     dispatch({ type: "UPDATE_CATEGORY", payload: updatedCategory });
   };
 
-  const onSubmit = (e) => {
+  const onSubmitCategory = (e) => {
     e.preventDefault();
     addCategory({
       id: crypto.randomUUID(),
@@ -78,10 +78,22 @@ const CategoriesContent = () => {
     });
   };
 
+  const onSubmitSubcategory = () => {
+    e.preventDefault();
+    addCategory({
+      id: crypto.randomUUID(),
+      name: categoryInputValue,
+      subcategories: [],
+    });
+  }
+
   const updateCategoryFormData = (_, value) => {
     setCategoryInputValue(value);
   };
 
+  const updateSubcategoryFormData = (_, value) => {
+    setSubcategoryInputValue(value);
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -107,8 +119,8 @@ const CategoriesContent = () => {
 
       <SvgIcon iconName="two-chevron-right" />
       <Form>
-      <FormInput
-          updateFormData={updateFormData}
+        <FormInput
+          updateFormData={updateSubcategoryFormData}
           placeholder="Введите название подкатегории"
           value={subcategoryInputValue}
         />
