@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import styles from "./Table.module.scss";
-import AddBtn from "./components/AddBtn/AddBtn";
 import DeletionBlock from "./components/DeletionBlock/DeletionBlock";
 import TableCell from "./components/TableCell/TableCell";
 
@@ -19,22 +18,21 @@ const sliceData = (data, showItems) => {
 };
 
 const Table = ({
+  data,
+  headers,
   tabPanel,
   selectable,
-  handleAddItem,
-  headers,
-  data,
   showItems,
   currentPage,
   handleRemove,
-  nothingFoundMessage = "Nothing Found",
+  handleRowClick,
   filters,
   editItem,
-
+  errorMessage = "Nothing Found",
 }) => {
   const [slicedData, setSlicedData] = useState([]);
   const [checkedItems, setCheckedItems] = useState([]);
-  const [activeTableCell, setActiveTableCell] = useState('');
+  const [activeTableCell, setActiveTableCell] = useState("");
 
   useEffect(() => {
     if (filters) {
@@ -77,14 +75,12 @@ const Table = ({
 
   const toggleActive = (id) => {
     setActiveTableCell(id);
-  }
+  };
 
   return (
     <div className={styles.wrapper}>
-      {/* {adding && <AddBtn handleClick={handleAddItem} />} */}
-
       {(filters ? slicedData.length : data.length) === 0 ? (
-        <span>{nothingFoundMessage}</span>
+        <span>{errorMessage}</span>
       ) : (
         <div className={styles.tableContainer}>
           {data.length > 0 && (
@@ -113,7 +109,7 @@ const Table = ({
                     <tr
                       key={id}
                       onClick={(e) =>
-                        handleAddItem ? handleAddItem(e, id) : undefined
+                        handleRowClick ? handleRowClick(e, id) : undefined
                       }
                     >
                       {selectable && (

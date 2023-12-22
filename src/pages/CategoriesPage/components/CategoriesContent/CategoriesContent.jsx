@@ -174,10 +174,10 @@ const CategoriesContent = () => {
         <Table
           data={categoriesTableData}
           headers={{ name: "Название категории" }}
-          handleAddItem={handleClick}
+          handleRowClick={handleClick}
           handleRemove={removeCategory}
           editItem={editCategory}
-          nothingFoundMessage="Здесь пока нет категорий"
+          errorMessage="Здесь пока нет категорий"
           tabPanel={true}
         />
       </div>
@@ -197,7 +197,7 @@ const CategoriesContent = () => {
             <Table
               data={subcategoriesTableData}
               headers={{ name: "Название подкатегории" }}
-              nothingFoundMessage={
+              errorMessage={
                 categoriesTableData.length
                   ? "Здесь пока нет подкатегорий"
                   : "Выберите категорию"
