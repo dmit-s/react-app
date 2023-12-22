@@ -67,24 +67,10 @@ const TableCell = ({
       className={`${styles.wrapper} ${activeId === id && styles.active}`}
     >
       <div className={styles.flexContainer}>
-        {/* {editable ? (
-          <input
-            ref={inputRef}
-            className={styles.content}
-            type="text"
-            value={value || "-"}
-            disabled={!isEditting}
-            onChange={handleChange}
-            onBlur={editable && handleBlur}
-            onFocus={editable && handleFocus}
-          />
-        ) : (
-          <span>{value || ""}</span>
-        )} */}
 
         <input
           ref={inputRef}
-          className={styles.content}
+          className={`${styles.content} ${editable && styles.editable}`}
           type="text"
           value={value || "-"}
           disabled={!isEditting}

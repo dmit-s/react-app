@@ -32,12 +32,20 @@
       overflow: hidden;
       text-overflow: ellipsis;
 
+      &.editable{
+        max-width: none;
+        text-overflow: clip;
+      }
+
       &:disabled {
         pointer-events: none;
       }
     }
 
     .buttonsContainer {
+      display: flex;
+      align-items: center;
+
       button:not(:last-child) {
         margin-right: 2.5rem;
       }

@@ -19,7 +19,7 @@
         }
 
         th {
-          padding: 1rem 0;
+          padding: 1rem 0.8rem;
           color: #737680;
           font-weight: 500;
           font-size: 1.4rem;
@@ -37,7 +37,7 @@
           border-bottom: 1px solid #ebecef;
 
           td {
-
+            padding: 1rem 0.8rem;
             &:not(:first-child) {
               padding-right: 6rem;
             }
