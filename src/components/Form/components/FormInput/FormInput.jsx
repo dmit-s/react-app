@@ -2,7 +2,6 @@ import styles from "./FormInput.module.scss";
 
 const FormInput = ({
   title,
-  name,
   value,
   inputType,
   placeholder,
@@ -16,7 +15,10 @@ const FormInput = ({
 
   return (
     <div className={styles.wrapper}>
-      <label className={styles.title}>{title}</label>
+      {title && (
+        <label className={styles.title}>{title}</label>
+      )}
+      
       <input
         onInput={handleInput ? handleInput : undefined}
         className={styles.input}
@@ -24,9 +26,13 @@ const FormInput = ({
         type={inputType}
         value={value}
         placeholder={placeholder}
-        name={name}
+        autoComplete="off"
       />
-      <small className={styles.error}>{error}</small>
+      
+      {error && (
+        <small className={styles.error}>{error}</small>
+      )}
+      
     </div>
   );
 };

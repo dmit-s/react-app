@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import SvgIcon from "../../../SvgIcon/SvgIcon";
 import styles from "./TableCell.module.scss";
-import useOutsideClick from "../../../../hooks/useOutsideClick";
 
 const TableCell = ({
   id,
@@ -12,9 +11,11 @@ const TableCell = ({
   removeFunc,
   activeId,
   toggleActive,
+  tabPanel
 }) => {
   const [isEditting, setEdding] = useState(false);
   const [value, setValue] = useState(content);
+  const [prevValue, setPrevValue] = useState(content);
   const inputRef = useRef();
 
   useEffect(() => {
@@ -24,7 +25,12 @@ const TableCell = ({
   }, [isEditting]);
 
   const handleChange = (e) => {
-    setValue(e.target.value);
+    if(e.target.value.length === 0){
+      setValue(prevValue);
+    } else {
+      setValue(e.target.value);
+    }
+    
   };
 
   const handleEdit = () => {
@@ -37,6 +43,7 @@ const TableCell = ({
 
   const handleRemove = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     removeFunc(id);
   };
 
@@ -50,9 +57,13 @@ const TableCell = ({
     editFunc(id, value);
   };
 
+  const handleFocus = (e) => {
+    setPrevValue(e.target.value);
+  }
+
   return (
     <td
-      onClick={editable && handleClick}
+      onClick={tabPanel && handleClick}
       style={{ cursor: `${editable && "pointer"}` }}
       className={`${styles.wrapper} ${activeId === id && styles.active}`}
     >
@@ -65,6 +76,7 @@ const TableCell = ({
           disabled={!isEditting}
           onChange={handleChange}
           onBlur={editable && handleBlur}
+          onFocus={editable && handleFocus}
         />
 
         <div className={styles.buttonsContainer}>

@@ -19,7 +19,7 @@ const sliceData = (data, showItems) => {
 };
 
 const Table = ({
-  adding,
+  tabPanel,
   selectable,
   handleAddItem,
   headers,
@@ -137,6 +137,7 @@ const Table = ({
                           removeFunc={handleRemove}
                           toggleActive={toggleActive}
                           activeId={activeTableCell}
+                          tabPanel={tabPanel}
                         />
                       ))}
                     </tr>

@@ -15,9 +15,13 @@ const CategoriesContent = () => {
   } = useContext(CategoriesContext);
   const [categoriesTableData, setCategoriesTableData] = useState([]);
   const [subcategoriesTableData, setSubcategoriesTableData] = useState([]);
-  const [activeCategory, setActiveCategory] = useState("");
+  const [activeCategory, setActiveCategory] = useState(null);
   const [categoryInputValue, setCategoryInputValue] = useState("");
   const [subcategoryInputValue, setSubcategoryInputValue] = useState("");
+  const [formsErrors, setFormsErrors] = useState({
+    category: null,
+    subcategory: null,
+  });
 
   useEffect(() => {
     setCategoriesTableData(
@@ -26,6 +30,10 @@ const CategoriesContent = () => {
         editable: true,
       })
     );
+
+    if (categoriesData.length === 0) {
+      setFormsErrors({ ...formsErrors, subcategory: null });
+    }
   }, [categoriesData]);
 
   useEffect(() => {
@@ -51,30 +59,43 @@ const CategoriesContent = () => {
     );
   }, []);
 
+  // set active
   const handleClick = (e, id) => {
     setActiveCategory(id);
   };
 
+  // remove
   const removeCategory = (id) => {
     dispatch({ type: "REMOVE_CATEGORY", payload: id });
+    if (activeCategory === id) {
+      setActiveCategory("");
+    }
   };
 
+  const removeSubcategory = (subcategoryId) => {
+    dispatch({
+      type: "REMOVE_SUBCATEGORY",
+      payload: { categoryId: activeCategory, subcategoryId },
+    });
+  };
+
+  // add
   const addCategory = (item) => {
     dispatch({ type: "ADD_CATEGORY", payload: item });
   };
 
   const addSubcategory = (categoryId, item) => {
+    console.log(item);
     dispatch({ type: "ADD_SUBCATEGORY", payload: { categoryId, item } });
   };
 
+  // edit
   const editCategory = (id, value) => {
     const category = categoriesData.find((item) => item.id === id);
     const updatedCategory = { ...category, name: value };
 
     dispatch({ type: "UPDATE_CATEGORY", payload: updatedCategory });
   };
-
-  console.log(categoriesData);
 
   const editSubcategory = (id, value) => {
     const updatedCategory = categoriesData.map((categoryItem) => {
@@ -92,23 +113,44 @@ const CategoriesContent = () => {
     dispatch({ type: "UPDATE_CATEGORY", payload: updatedCategory });
   };
 
+  // onSubmit
   const onSubmitCategory = (e) => {
     e.preventDefault();
+
+    if (!categoryInputValue.length) {
+      if (!subcategoryInputValue.length) {
+        setFormsErrors({ ...formsErrors, category: "Введите что-то" });
+      }
+      return;
+    }
+
     addCategory({
       id: crypto.randomUUID(),
       name: categoryInputValue,
       subcategories: [],
     });
+
+    setFormsErrors({ ...formsErrors, category: null });
+    setCategoryInputValue("");
   };
 
   const onSubmitSubcategory = (e) => {
     e.preventDefault();
+    if (!subcategoryInputValue.length) {
+      setFormsErrors({ ...formsErrors, subcategory: "Введите что-то" });
+      return;
+    }
+
     addSubcategory(activeCategory, {
       id: crypto.randomUUID(),
       name: subcategoryInputValue,
     });
+
+    setFormsErrors({ ...formsErrors, subcategory: null });
+    setSubcategoryInputValue("");
   };
 
+  // updateInputsValue
   const updateCategoryFormData = (_, value) => {
     setCategoryInputValue(value);
   };
@@ -119,15 +161,16 @@ const CategoriesContent = () => {
 
   return (
     <div className={styles.wrapper}>
-      <Form onSubmit={onSubmitCategory}>
-        <FormInput
-          updateFormData={updateCategoryFormData}
-          placeholder="Введите название категории"
-          name="category"
-          value={categoryInputValue}
-        />
-        <button className="purple-btn">Добавить категорию</button>
-
+      <div className={styles.column}>
+        <Form onSubmit={onSubmitCategory}>
+          <FormInput
+            updateFormData={updateCategoryFormData}
+            placeholder="Введите название категории"
+            value={categoryInputValue}
+            error={formsErrors.category}
+          />
+          <button className="purple-btn">Добавить категорию</button>
+        </Form>
         <Table
           data={categoriesTableData}
           headers={{ name: "Название категории" }}
@@ -135,29 +178,40 @@ const CategoriesContent = () => {
           handleRemove={removeCategory}
           editItem={editCategory}
           nothingFoundMessage="Здесь пока нет категорий"
-          adding
+          tabPanel={true}
         />
-      </Form>
+      </div>
       <SvgIcon iconName="two-chevron-right" />
-      <Form onSubmit={onSubmitSubcategory}>
-        <FormInput
-          updateFormData={updateSubcategoryFormData}
-          placeholder="Введите название подкатегории"
-          value={subcategoryInputValue}
-        />
-        <button className="purple-btn">Добавить подкатегорию</button>
-
-        <Table
-          data={subcategoriesTableData}
-          headers={{ name: "Название подкатегории" }}
-          nothingFoundMessage={
-            categoriesTableData.length
-              ? "Здесь пока нет подкатегорий"
-              : "Выберите категорию"
-          }
-          editItem={editSubcategory}
-        />
-      </Form>
+      <div className={styles.column}>
+        {activeCategory && categoriesData.length > 0 ? (
+          <>
+            <Form onSubmit={onSubmitSubcategory}>
+              <FormInput
+                updateFormData={updateSubcategoryFormData}
+                placeholder="Введите название подкатегории"
+                value={subcategoryInputValue}
+                error={formsErrors.subcategory}
+              />
+              <button className="purple-btn">Добавить подкатегорию</button>
+            </Form>
+            <Table
+              data={subcategoriesTableData}
+              headers={{ name: "Название подкатегории" }}
+              nothingFoundMessage={
+                categoriesTableData.length
+                  ? "Здесь пока нет подкатегорий"
+                  : "Выберите категорию"
+              }
+              editItem={editSubcategory}
+              handleRemove={removeSubcategory}
+            />
+          </>
+        ) : (
+          <div className={styles.messageContainer}>
+            <span>Выберите категорию</span>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
