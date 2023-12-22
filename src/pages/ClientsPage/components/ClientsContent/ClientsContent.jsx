@@ -52,7 +52,7 @@ const ClientsContent = () => {
         }
       }
     });
-    setFilteredArr(() => filtered);
+    setFilteredArr(filtered);
   };
 
   return (
@@ -66,11 +66,13 @@ const ClientsContent = () => {
         data={searchValue.length > 0 ? filteredArr : tableData}
         showItems={showItems}
         currentPage={currentPage}
+        filters
         headers={{
           name: "ФИ",
           email: "Почта",
           tel: "Телефон",
         }}
+
       />
     </>
   );

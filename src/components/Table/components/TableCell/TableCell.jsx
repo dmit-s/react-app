@@ -11,7 +11,7 @@ const TableCell = ({
   removeFunc,
   activeId,
   toggleActive,
-  tabPanel
+  tabPanel,
 }) => {
   const [isEditting, setEdding] = useState(false);
   const [value, setValue] = useState(content);
@@ -25,12 +25,11 @@ const TableCell = ({
   }, [isEditting]);
 
   const handleChange = (e) => {
-    if(e.target.value.length === 0){
+    if (e.target.value.length === 0) {
       setValue(prevValue);
     } else {
       setValue(e.target.value);
     }
-    
   };
 
   const handleEdit = () => {
@@ -59,7 +58,7 @@ const TableCell = ({
 
   const handleFocus = (e) => {
     setPrevValue(e.target.value);
-  }
+  };
 
   return (
     <td
@@ -68,6 +67,21 @@ const TableCell = ({
       className={`${styles.wrapper} ${activeId === id && styles.active}`}
     >
       <div className={styles.flexContainer}>
+        {/* {editable ? (
+          <input
+            ref={inputRef}
+            className={styles.content}
+            type="text"
+            value={value || "-"}
+            disabled={!isEditting}
+            onChange={handleChange}
+            onBlur={editable && handleBlur}
+            onFocus={editable && handleFocus}
+          />
+        ) : (
+          <span>{value || ""}</span>
+        )} */}
+
         <input
           ref={inputRef}
           className={styles.content}

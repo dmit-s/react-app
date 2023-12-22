@@ -37,16 +37,18 @@
           border-bottom: 1px solid #ebecef;
 
           td {
-            max-width: 160px;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
 
             &:not(:first-child) {
               padding-right: 6rem;
             }
           }
         }
+      }
+
+      input[type="checkbox"]{
+        width: 1.6rem;
+        height: 1.6rem;
+        accent-color: #C06ECC;
       }
     }
   }

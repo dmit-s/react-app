@@ -24,8 +24,8 @@ const Table = ({
   selectable,
   showItems,
   currentPage,
-  handleRemove,
   handleRowClick,
+  handleRemove,
   filters,
   editItem,
   errorMessage = "Nothing Found",
@@ -33,6 +33,8 @@ const Table = ({
   const [slicedData, setSlicedData] = useState([]);
   const [checkedItems, setCheckedItems] = useState([]);
   const [activeTableCell, setActiveTableCell] = useState("");
+
+  console.log(slicedData);
 
   useEffect(() => {
     if (filters) {

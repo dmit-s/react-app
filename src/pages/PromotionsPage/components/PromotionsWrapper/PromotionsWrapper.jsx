@@ -193,12 +193,19 @@ const PromotionsWrapper = () => {
     ));
   };
 
+  const handleAddPromotion = (e) => {
+    e.preventDefault();
+    openModal(e);
+  }
+
   return (
     <>
-      <div>
         {status === "received" && (
           <>
             <PromotionsTop openModal={openModal} />
+            <Form onSubmit={handleAddPromotion}>
+              <button className="purple-btn">Добавить акцию</button>
+            </Form>
             <Table
               adding={true}
               selectable={true}
@@ -252,7 +259,6 @@ const PromotionsWrapper = () => {
             </Modal>
           </>
         )}
-      </div>
     </>
   );
 };

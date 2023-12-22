@@ -1,9 +1,4 @@
 .wrapper {
-  max-width: 160px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-
   &.active {
     .flexContainer {
       .content {
@@ -22,8 +17,10 @@
 
   .flexContainer {
     display: flex;
+    justify-content: space-between;
 
     .content {
+      max-width: 160px;
       width: 100%;
       font-size: 1.4rem;
       color: #434652;
@@ -32,8 +29,10 @@
       outline: none;
       cursor: inherit;
       pointer-events: all;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
-      &:disabled{
+      &:disabled {
         pointer-events: none;
       }
     }
